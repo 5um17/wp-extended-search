@@ -1,0 +1,159 @@
+# Copyright (C) 2018 WP Extended Search
+# This file is distributed under the same license as the WP Extended Search package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Extended Search 1.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-extended-"
+"search\n"
+"POT-Creation-Date: 2018-08-17 12:18+0530\n"
+"PO-Revision-Date: 2018-08-17 12:19+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/WP_ES_admin.php:38
+msgid "Settings"
+msgstr ""
+
+#: admin/WP_ES_admin.php:43
+msgid "Save Changes"
+msgstr ""
+
+#: admin/WP_ES_admin.php:45
+msgid "Reset to WP default"
+msgstr ""
+
+#: admin/WP_ES_admin.php:61
+msgid "Select Fields to include in WordPress default Search"
+msgstr ""
+
+#: admin/WP_ES_admin.php:62
+msgid "Miscellaneous Settings"
+msgstr ""
+
+#: admin/WP_ES_admin.php:65
+msgid "General Search Setting"
+msgstr ""
+
+#: admin/WP_ES_admin.php:66
+msgid "Select Meta Key Names"
+msgstr ""
+
+#: admin/WP_ES_admin.php:67
+msgid "Select Taxonomies"
+msgstr ""
+
+#: admin/WP_ES_admin.php:68
+msgid "Author Setting"
+msgstr ""
+
+#: admin/WP_ES_admin.php:69
+msgid "Select Post Types"
+msgstr ""
+
+#: admin/WP_ES_admin.php:70
+msgid "Terms Relation Type"
+msgstr ""
+
+#: admin/WP_ES_admin.php:71
+msgid "Select date to exclude older results"
+msgstr ""
+
+#: admin/WP_ES_admin.php:72
+msgid "Posts per page"
+msgstr ""
+
+#: admin/WP_ES_admin.php:132
+msgid "Settings has been changed to WordPress default search setting."
+msgstr ""
+
+#: admin/WP_ES_admin.php:137
+msgid "Select atleast one post type!"
+msgstr ""
+
+#: admin/WP_ES_admin.php:142
+msgid "Select atleast one setting to search!"
+msgstr ""
+
+#: admin/WP_ES_admin.php:147
+msgid "Date seems to be in invalid format!"
+msgstr ""
+
+#: admin/WP_ES_admin.php:159
+msgid ""
+"Every field have OR relation with each other. e.g. if someone search for "
+"\"5um17\" then search results will show those items which have \"5um17\" as "
+"meta value or taxonomy's term or in title or in content, whatever option is "
+"selected."
+msgstr ""
+
+#: admin/WP_ES_admin.php:181
+msgid "Search in Title"
+msgstr ""
+
+#: admin/WP_ES_admin.php:185
+msgid "Search in Content"
+msgstr ""
+
+#: admin/WP_ES_admin.php:189
+msgid "Search in Excerpt"
+msgstr ""
+
+#: admin/WP_ES_admin.php:211
+msgid "No meta key found!"
+msgstr ""
+
+#: admin/WP_ES_admin.php:246
+msgid "No public taxonomy found!"
+msgstr ""
+
+#: admin/WP_ES_admin.php:259
+msgid "Search in Author display name"
+msgstr ""
+
+#: admin/WP_ES_admin.php:260
+msgid ""
+"If checked then it will display those results whose Author \"Display name\" "
+"match the search terms."
+msgstr ""
+
+#: admin/WP_ES_admin.php:294
+msgid "No public post type found!"
+msgstr ""
+
+#: admin/WP_ES_admin.php:306
+msgid "AND"
+msgstr ""
+
+#: admin/WP_ES_admin.php:307
+msgid "OR"
+msgstr ""
+
+#: admin/WP_ES_admin.php:309
+msgid ""
+"Type of query relation between search terms. e.g. someone search for \"my "
+"query\" then define the relation between \"my\" and \"query\". Default value "
+"is AND."
+msgstr ""
+
+#: admin/WP_ES_admin.php:321
+msgid ""
+"Contents will not appear in search results older than this date OR leave "
+"blank to disable this feature."
+msgstr ""
+
+#: admin/WP_ES_admin.php:332
+msgid ""
+"Number of posts to display on search result page OR leave blank for default "
+"value."
+msgstr ""
+
+#: admin/WP_ES_admin.php:366
+msgid "Docs"
+msgstr ""
+
+#: admin/WP_ES_admin.php:369
+msgid "More Plugins"
+msgstr ""
