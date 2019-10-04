@@ -2,7 +2,7 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search results, posts per page
 Requires at least: 4.0
-Tested up to: 4.9.8
+Tested up to: 5.2.3
 Stable tag: 1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -27,7 +27,10 @@ You can include or exclude post types to appear in search results.
 * Translation ready
 * Compatible with WPML
 
-[Complete documentation](http://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html)
+= Links =
+
+* [Complete documentation](http://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html)
+* [GitHub repository](https://github.com/5um17/wp-extended-search)
 
 == Installation ==
 
