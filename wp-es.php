@@ -25,6 +25,11 @@ if (!defined('WP_ES_VERSION')) {
     define('WP_ES_VERSION', '1.2');
 }
 
+if ( ! defined( 'WP_ES_Filename' ) ) {
+    //Plugin Filename
+    define( 'WP_ES_Filename', plugin_basename( __FILE__ ) );
+}
+
 /* Includes library files */
 foreach( glob ( WP_ES_DIR . "/includes/*.php" ) as $filename ) {
     require_once( $filename );

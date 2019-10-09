@@ -37,7 +37,7 @@ class WP_ES {
                 'meta_keys'         =>  array(),
                 'taxonomies'        =>  array(),
                 'authors'           =>  false,
-                'post_types'        =>  array('post', 'page', 'attachment'),
+                'post_types'        =>  array('post', 'page'),
                 'exclude_date'      => '',
                 'posts_per_page'    => '',
                 'terms_relation'    => 1
@@ -100,6 +100,7 @@ class WP_ES {
                     $query->query_vars['post_type'] = (array) $this->WP_ES_settings['post_types'];
                 }
             }
+	    
             if (!empty($this->WP_ES_settings['exclude_date'])) {
                 $query->set('date_query', array(
                     array(
@@ -107,10 +108,19 @@ class WP_ES {
                         )
                 ));
             }
+	    
             $posts_per_page = intval($this->WP_ES_settings['posts_per_page']); //Putting in extra line just to get rid off from WP svn pre-commit hook error.
             if (!empty($posts_per_page)) {
                 $query->set('posts_per_page', $posts_per_page);
             }
+	    
+	    if ( is_array( $query->get( 'post_type' ) ) && in_array( 'attachment', $query->get( 'post_type' ) ) ) {
+		$query->set( 'post_status', array( 'publish', 'inherit' ) );
+		if ( is_user_logged_in() ) {
+		    $query->set( 'post_status', array( 'publish', 'inherit', 'private' ) );
+		    $query->set( 'perm', 'readable' ); //Check if current user can read private posts
+		}
+	    }
         }
     }
 
@@ -285,7 +295,8 @@ class WP_ES {
      */
     public function wp_core_actions() {
         $wp_core_actions = array(
-            'query-attachments'
+            'query-attachments',
+	    'menu-quick-search'
         );
         
         $current_action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : false;

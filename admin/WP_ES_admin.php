@@ -18,6 +18,7 @@ class WP_ES_admin {
         add_action('admin_enqueue_scripts', array($this, 'WP_ES_admin_scripts'));
         
         add_filter( 'plugin_row_meta', array($this, 'plugin_links'), 10, 2 );
+	add_filter( 'plugin_action_links_' . WP_ES_Filename, array($this, 'plugin_action_links'));
     }
 
     /**
@@ -357,7 +358,7 @@ class WP_ES_admin {
      * @return array $links array with newly added links
      */
     public function plugin_links($links, $file) {
-	if ( strpos( $file, 'wp-extended-search' ) === false ) {
+	if ( $file !== WP_ES_Filename ) {
             return $links;
         }
         
@@ -369,6 +370,22 @@ class WP_ES_admin {
                     . __('More Plugins', 'wp-extended-search')
                     . '</a>';
         }
+	return $links;
+    }
+    
+    /**
+     * Add setting link to plugin action list.
+     * @since dev
+     * @param array $links action links
+     * @return array $links new action links
+     */
+    public function plugin_action_links( $links ) {
+	if ( is_array( $links ) ) {
+            $links[] = '<a href="' . admin_url( 'options-general.php?page=wp-es' ) . '">'
+                    . __( 'Settings', 'wp-extended-search' )
+                    . '</a>';
+        }
+	
 	return $links;
     }
 }

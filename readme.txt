@@ -29,7 +29,7 @@ You can include or exclude post types to appear in search results.
 
 = Links =
 
-* [Complete documentation](http://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html)
+* [Complete documentation](https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html)
 * [GitHub repository](https://github.com/5um17/wp-extended-search)
 
 == Installation ==
@@ -43,12 +43,17 @@ You can include or exclude post types to appear in search results.
 
 = Do you have any question? =
 
-Please use plugin [support forum](http://wordpress.org/support/plugin/wp-extended-search) 
+Please use plugin [support forum](https://wordpress.org/support/plugin/wp-extended-search) 
 
 == Screenshots ==
 1. WP Extented Search settings page
 
 == Changelog ==
+
+= dev - 0000-00-00 =
+* Fixed media search issue
+* Fixed conflict with search when adding new menu item in backend
+* Added setting link in plugin action links
 
 = 1.2 - 2018-08-17 =
 * Fixed bbPress forum posts dissappear
