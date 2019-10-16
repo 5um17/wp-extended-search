@@ -8,6 +8,8 @@ class WP_ES {
 
     /* Defaults Variable */
     public $WP_ES_settings = '';
+    public $current_setting_id = false;
+    public $option_key_name = 'wp_es_options';
 
     /**
      * Default Constructor
@@ -53,8 +55,16 @@ class WP_ES {
      * @since 1.0
      */
     public function wp_es_options() {
-        $db_settings = get_option('wp_es_options');
-        $settings = wp_parse_args($db_settings, $this->default_options());
+        
+        if ( ! empty( $_REQUEST[ 'wpessid' ] ) ) {
+	    $wpessid = intval( $_REQUEST[ 'wpessid' ] );
+	    if ( ( is_admin() && get_post_type( $wpessid ) === 'wpes_setting' ) || ( !is_admin() && !empty ( get_option( "wp_es_options_$wpessid" ) ) ) ) {
+		$this->current_setting_id = $wpessid;
+		$this->option_key_name = 'wp_es_options_' . $this->current_setting_id;
+	    }
+	}
+        
+        $settings = wp_parse_args(get_option( $this->option_key_name ), $this->default_options());
         return $settings;
     }
     
