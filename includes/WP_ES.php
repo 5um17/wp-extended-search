@@ -1,6 +1,6 @@
 <?php
 /**
- * Main class of WP Extened Search
+ * Main class of WP Extended Search
  *
  * @author 5um17
  */
@@ -10,12 +10,18 @@ class WP_ES {
     public $WP_ES_settings = '';
     public $current_setting_id = false;
     public $option_key_name = 'wp_es_options';
+    public static $instance = false;
 
     /**
      * Default Constructor
      * @since 1.0
      */
     public function __construct() {
+	
+	if ( is_admin() ) {
+	    new WP_ES_admin();
+	    new WP_ES_setting_post_type();
+	}
         
         $this->WP_ES_settings = $this->wp_es_options();
         
@@ -27,8 +33,16 @@ class WP_ES {
         add_action('plugins_loaded', array($this, 'wp_es_plugin_loaded'));
     }
     
+    public static function instance() {
+        if ( empty( self::$instance ) ) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+    
     /**
-     * Get Defualt options
+     * Get Default options
      * @since 1.0
      */
     public function default_options() {

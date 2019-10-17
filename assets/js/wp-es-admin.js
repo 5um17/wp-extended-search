@@ -5,12 +5,15 @@
 */
 
 jQuery(document).ready(function (){
-    jQuery('select[name="wpessid"]').change(function (){
+    jQuery('#wpessid').change(function (){
         var value = jQuery(this).val();
-        if (value !== '') {
-            window.location.href = "admin.php?page=wp-es&wpessid="+value;
+        
+        if ( value === 'new' ) {
+            window.location.href = wpes_admin_vars.new_setting_url;
+        } else if ( value !== '' ) {
+            window.location.href = wpes_admin_vars.admin_setting_page + '&wpessid=' + parseInt(value);
         } else {
-            window.location.href = "admin.php?page=wp-es";
+            window.location.href = wpes_admin_vars.admin_setting_page;
         }
     });
 });

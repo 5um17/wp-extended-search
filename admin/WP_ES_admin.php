@@ -6,23 +6,12 @@
  */
 class WP_ES_admin {
     
-    public $current_page = false;
-    public $current_setting_id = false;
-    public $option_key_name = 'wp_es_options';
-
-
     /**
      * Default Constructor
      * @since 1.0
      */
     public function __construct(){
-	global $WP_ES;
 	
-	$this->current_setting_id = $WP_ES->current_setting_id;
-	$this->option_key_name = $WP_ES->option_key_name;
-	
-	new WP_ES_setting_post_type();
-        
         add_action('admin_menu', array($this, 'WP_ES_admin_add_page'));
         add_action('admin_init', array($this, 'WP_ES_admin_init'));
         
@@ -39,7 +28,7 @@ class WP_ES_admin {
     public function WP_ES_admin_add_page(){
 	global $submenu;
 	
-	add_menu_page('WP Extended Search Settings', 'Extended Search', 'manage_options', 'wp-es');
+	add_menu_page( 'WP Extended Search Settings', 'Extended Search', 'manage_options', 'wp-es', NULL, 'dashicons-search' );
         add_submenu_page('wp-es', 'WP Extended Search Settings', 'Search Settings', 'manage_options', 'wp-es', array($this, 'wp_es_page'));
 	
 	$wpes_menu = $submenu['wp-es'];
@@ -56,6 +45,8 @@ class WP_ES_admin {
         <div class="wrap">
             
             <h2>WP Extended Search <?php _e('Settings', 'wp-extended-search'); ?></h2>
+	    
+	    <?php settings_errors(); ?>
 
             <form method="post" action="options.php"><?php
                 settings_fields('wp_es_option_group');	
@@ -75,14 +66,14 @@ class WP_ES_admin {
     public function WP_ES_admin_init(){
 
         /* Register Settings */
-        register_setting('wp_es_option_group', $this->option_key_name, array($this, 'wp_es_save'));
+        register_setting('wp_es_option_group', WPES()->option_key_name, array($this, 'wp_es_save'));
         
         /* Add Section */
         add_settings_section( 'wp_es_section_1', __('Select Fields to include in WordPress default Search', 'wp-extended-search' ), array($this, 'wp_es_section_content'), 'wp-es' );	
         add_settings_section( 'wp_es_section_misc', __('Miscellaneous Settings', 'wp-extended-search' ), array($this, 'wp_es_section_content_misc'), 'wp-es' );
 
         /* Add fields */
-        add_settings_field( 'wp_es_settings_name', __('Settings Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_1' );
+        add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_title_and_post_content', __('General Search Setting', 'wp-extended-search'), array($this, 'wp_es_title_content_checkbox'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_custom_fields', __('Select Meta Key Names' , 'wp-extended-search'), array($this, 'wp_es_custom_field_name_list'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_taxonomies', __('Select Taxonomies' , 'wp-extended-search'), array($this, 'wp_es_taxonomies_settings'), 'wp-es', 'wp_es_section_1' );
@@ -106,6 +97,11 @@ class WP_ES_admin {
             wp_enqueue_style('wpes_jquery_ui', WP_ES_URL . 'assets/css/jQueryUI/jquery-ui.min.css');
             wp_enqueue_style('wpes_jquery_ui_theme', WP_ES_URL . 'assets/css/jQueryUI/jquery-ui.theme.min.css');
             wp_enqueue_style('wpes_admin_css', WP_ES_URL . 'assets/css/wp-es-admin.css');
+	    
+	    wp_localize_script( 'wpes_admin_js', 'wpes_admin_vars', array(
+		'admin_setting_page' => admin_url('admin.php?page=wp-es'),
+		'new_setting_url' => admin_url('post-new.php?post_type=wpes_setting')
+	    ) );
         }
     }
 
@@ -149,12 +145,11 @@ class WP_ES_admin {
      * @return array validated input for saving
      */
     public function wp_es_save($input){
-        global $WP_ES;
-        $settings = $WP_ES->WP_ES_settings;
+        $settings = WPES()->WP_ES_settings;
         
         if (isset($_POST['reset'])) {
             add_settings_error('wp_es_error', 'wp_es_error_reset', __('Settings has been changed to WordPress default search setting.', 'wp-extended-search'), 'updated');
-            return $WP_ES->default_options();
+            return WPES()->default_options();
         }
         
         if (!isset($input['post_types']) || empty($input['post_types'])) {
@@ -192,8 +187,6 @@ class WP_ES_admin {
     }
     
     public function wp_es_settings_name() {
-        global $WP_ES;
-        
         $all_settings = get_posts(array(
 	    'post_type'		=> 'wpes_setting',
 	    'posts_per_page'	=>  -1,
@@ -204,10 +197,10 @@ class WP_ES_admin {
 //	print_r($all_settings); die;
 	?>
         
-        <select name="wpessid">
+        <select id="wpessid" name="wpessid">
             <option value=""><?php _e('Global (default)', 'wp-extended-search'); ?></option><?php
             foreach ($all_settings as $setting_name) { ?>
-		<option <?php selected( $setting_name->ID, $this->current_setting_id ); ?> value="<?php echo $setting_name->ID; ?>"><?php echo get_the_title($setting_name); ?></option><?php
+		<option <?php selected( $setting_name->ID, WPES()->current_setting_id ); ?> value="<?php echo $setting_name->ID; ?>"><?php echo get_the_title($setting_name); ?></option><?php
             } ?>
             <option value="new"><?php _e('Create New', 'wp-extended-search'); ?></option>
         </select><?php
@@ -219,19 +212,18 @@ class WP_ES_admin {
      * @global object $WP_ES
      */
     public function wp_es_title_content_checkbox(){ 
-        global $WP_ES;
-        $settings = $WP_ES->WP_ES_settings; ?>
+        $settings = WPES()->WP_ES_settings; ?>
 
-        <input type="hidden" name="<?php echo $this->option_key_name; ?>[title]" value="0" />
-        <input <?php checked($settings['title']); ?> type="checkbox" id="estitle" name="<?php echo $this->option_key_name; ?>[title]" value="1" />&nbsp;
+        <input type="hidden" name="<?php echo WPES()->option_key_name; ?>[title]" value="0" />
+        <input <?php checked($settings['title']); ?> type="checkbox" id="estitle" name="<?php echo WPES()->option_key_name; ?>[title]" value="1" />&nbsp;
         <label for="estitle"><?php _e('Search in Title', 'wp-extended-search'); ?></label>
         <br />
-        <input type="hidden" name="<?php echo $this->option_key_name; ?>[content]" value="0" />
-        <input <?php checked($settings['content']); ?> type="checkbox" id="escontent" name="<?php echo $this->option_key_name; ?>[content]" value="1" />&nbsp;
+        <input type="hidden" name="<?php echo WPES()->option_key_name; ?>[content]" value="0" />
+        <input <?php checked($settings['content']); ?> type="checkbox" id="escontent" name="<?php echo WPES()->option_key_name; ?>[content]" value="1" />&nbsp;
         <label for="escontent"><?php _e('Search in Content', 'wp-extended-search'); ?></label>
         <br />
-        <input type="hidden" name="<?php echo $this->option_key_name; ?>[excerpt]" value="0" />
-        <input <?php checked($settings['excerpt']); ?> type="checkbox" id="esexcerpt" name="<?php echo $this->option_key_name; ?>[excerpt]" value="1" />&nbsp;
+        <input type="hidden" name="<?php echo WPES()->option_key_name; ?>[excerpt]" value="0" />
+        <input <?php checked($settings['excerpt']); ?> type="checkbox" id="esexcerpt" name="<?php echo WPES()->option_key_name; ?>[excerpt]" value="1" />&nbsp;
         <label for="esexcerpt"><?php _e('Search in Excerpt', 'wp-extended-search'); ?></label><?php
     }
 
@@ -248,7 +240,7 @@ class WP_ES_admin {
             <div class="wpes-meta-keys-wrapper"><?php
                 foreach ((array)$meta_keys as $meta_key) { ?>
                     <p>
-                        <input <?php echo $this->wp_es_checked($meta_key, $WP_ES->WP_ES_settings['meta_keys']); ?> type="checkbox" id="<?php echo $meta_key; ?>" name="<?php echo $this->option_key_name; ?>[meta_keys][]" value="<?php echo $meta_key; ?>" />
+                        <input <?php echo $this->wp_es_checked($meta_key, WPES()->WP_ES_settings['meta_keys']); ?> type="checkbox" id="<?php echo $meta_key; ?>" name="<?php echo WPES()->option_key_name; ?>[meta_keys][]" value="<?php echo $meta_key; ?>" />
                         <label for="<?php echo $meta_key; ?>"><?php echo $meta_key; ?></label>&nbsp;&nbsp;&nbsp;
                     </p><?php
                 } ?>
@@ -265,8 +257,7 @@ class WP_ES_admin {
      * @global object $WP_ES
      */
     public function wp_es_taxonomies_settings() {
-        global $WP_ES;
-        
+	
         /**
          * Filter taxonomies arguments
          * @since 1.0.1
@@ -285,7 +276,7 @@ class WP_ES_admin {
         $all_taxonomies = apply_filters('wpes_tax', get_taxonomies($tax_args, 'objects'));
         if (is_array($all_taxonomies) && !empty($all_taxonomies)) {
             foreach ($all_taxonomies as $tax_name => $tax_obj) { ?>
-                <input <?php echo $this->wp_es_checked($tax_name, $WP_ES->WP_ES_settings['taxonomies']); ?> type="checkbox" value="<?php echo $tax_name; ?>" id="<?php echo 'wp_es_' . $tax_name; ?>" name="<?php echo $this->option_key_name; ?>[taxonomies][]" />&nbsp;
+		<input <?php echo $this->wp_es_checked($tax_name, WPES()->WP_ES_settings['taxonomies']); ?> type="checkbox" value="<?php echo $tax_name; ?>" id="<?php echo 'wp_es_' . $tax_name; ?>" name="<?php echo WPES()->option_key_name; ?>[taxonomies][]" />&nbsp;
                 <label for="<?php echo 'wp_es_' . $tax_name; ?>"><?php echo !empty($tax_obj->labels->name) ? $tax_obj->labels->name : $tax_name; ?></label><br /><?php
             }
         } else { ?>
@@ -298,10 +289,9 @@ class WP_ES_admin {
      * @since 1.1
      * @global object $WP_ES
      */
-    public function wp_es_author_settings() {
-        global $WP_ES; ?>
-        <input name="<?php echo $this->option_key_name; ?>[authors]" type="hidden" value="0" />
-        <input id="wpes_inlcude_authors" <?php checked($WP_ES->WP_ES_settings['authors']); ?> type="checkbox" value="1" name="<?php echo $this->option_key_name; ?>[authors]" />
+    public function wp_es_author_settings() { ?>
+        <input name="<?php echo WPES()->option_key_name; ?>[authors]" type="hidden" value="0" />
+        <input id="wpes_inlcude_authors" <?php checked(WPES()->WP_ES_settings['authors']); ?> type="checkbox" value="1" name="<?php echo WPES()->option_key_name; ?>[authors]" />
         <label for="wpes_inlcude_authors"><?php _e('Search in Author display name', 'wp-extended-search'); ?></label>
         <p class="description"><?php _e('If checked then it will display those results whose Author "Display name" match the search terms.', 'wp-extended-search'); ?></p><?php
     }
@@ -312,7 +302,6 @@ class WP_ES_admin {
      * @global object $WP_ES
      */
     public function wp_es_post_types_settings() {
-        global $WP_ES;
 
         /**
          * Filter post type arguments
@@ -333,7 +322,7 @@ class WP_ES_admin {
         
         if (is_array($all_post_types) && !empty($all_post_types)) {
             foreach ($all_post_types as $post_name => $post_obj) { ?>
-                <input <?php echo $this->wp_es_checked($post_name, $WP_ES->WP_ES_settings['post_types']); ?> type="checkbox" value="<?php echo $post_name; ?>" id="<?php echo 'wp_es_' . $post_name; ?>" name="<?php echo $this->option_key_name; ?>[post_types][]" />&nbsp;
+		<input <?php echo $this->wp_es_checked($post_name, WPES()->WP_ES_settings['post_types']); ?> type="checkbox" value="<?php echo $post_name; ?>" id="<?php echo 'wp_es_' . $post_name; ?>" name="<?php echo WPES()->option_key_name; ?>[post_types][]" />&nbsp;
                 <label for="<?php echo 'wp_es_' . $post_name; ?>"><?php echo isset($post_obj->labels->name) ? $post_obj->labels->name : $post_name; ?></label><br /><?php
             }
         } else { ?>
@@ -346,11 +335,10 @@ class WP_ES_admin {
      * @since 1.1
      * @global object $WP_ES
      */
-    public function wp_es_terms_relation_type() {
-        global $WP_ES; ?>
-	<select <?php echo $this->wp_es_disabled( $WP_ES->WP_ES_settings['exact_match'] , 'yes' ); ?> id="es_terms_relation" name="<?php echo $this->option_key_name; ?>[terms_relation]">
-            <option <?php selected($WP_ES->WP_ES_settings['terms_relation'], 1); ?> value="1"><?php _e('AND', 'wp-extended-search'); ?></option>
-            <option <?php selected($WP_ES->WP_ES_settings['terms_relation'], 2); ?> value="2"><?php _e('OR', 'wp-extended-search'); ?></option>
+    public function wp_es_terms_relation_type() { ?>
+        <select <?php echo $this->wp_es_disabled( WPES()->WP_ES_settings['exact_match'] , 'yes' ); ?> id="es_terms_relation" name="<?php echo WPES()->option_key_name; ?>[terms_relation]">
+            <option <?php selected(WPES()->WP_ES_settings['terms_relation'], 1); ?> value="1"><?php _e('AND', 'wp-extended-search'); ?></option>
+            <option <?php selected(WPES()->WP_ES_settings['terms_relation'], 2); ?> value="2"><?php _e('OR', 'wp-extended-search'); ?></option>
         </select>
         <p class="description"><?php
 	    if ( $WP_ES->WP_ES_settings['exact_match'] == 'yes' ) {
@@ -366,10 +354,9 @@ class WP_ES_admin {
      * @since 1.0.2
      * @global object $WP_ES
      */
-    public function wp_es_exclude_results() {
-        global $WP_ES; ?>
+    public function wp_es_exclude_results() { ?>
         <script type="text/javascript">jQuery(document).ready(function (){ jQuery('#es_exclude_date').datepicker({ maxDate: new Date(), changeYear: true, dateFormat: "MM dd, yy" }); });</script>
-        <input class="regular-text" type="text" value="<?php echo esc_attr($WP_ES->WP_ES_settings['exclude_date']); ?>" name="<?php echo $this->option_key_name; ?>[exclude_date]" id="es_exclude_date" />
+        <input class="regular-text" type="text" value="<?php echo esc_attr(WPES()->WP_ES_settings['exclude_date']); ?>" name="<?php echo WPES()->option_key_name; ?>[exclude_date]" id="es_exclude_date" />
         <p class="description"><?php _e('Contents will not appear in search results older than this date OR leave blank to disable this feature.', 'wp-extended-search'); ?></p><?php
     }
     
@@ -378,9 +365,8 @@ class WP_ES_admin {
      * @since 1.1
      * @global object $WP_ES
      */
-    public function wp_es_posts_per_page() {
-        global $WP_ES; ?>
-        <input min="-1" class="small-text" type="number" value="<?php echo esc_attr($WP_ES->WP_ES_settings['posts_per_page']); ?>" name="<?php echo $this->option_key_name; ?>[posts_per_page]" id="es_posts_per_page" />
+    public function wp_es_posts_per_page() { ?>
+        <input min="-1" class="small-text" type="number" value="<?php echo esc_attr(WPES()->WP_ES_settings['posts_per_page']); ?>" name="<?php echo WPES()->option_key_name; ?>[posts_per_page]" id="es_posts_per_page" />
         <p class="description"><?php _e('Number of posts to display on search result page OR leave blank for default value.', 'wp-extended-search'); ?></p><?php
     }
     
@@ -421,11 +407,7 @@ class WP_ES_admin {
     
     }
 
-    public function wp_es_register_setting() { ?> 
-        <input class="regular-text" type="text" value="" name="wp_es_all_settings[<?php echo uniqid(); ?>]" id="es_setting_name" /><?php
-    }
-
-        /**
+    /**
      * return checked if value exist in array
      * @since 1.0
      * @param mixed $value value to check against array
