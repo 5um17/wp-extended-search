@@ -5,7 +5,7 @@ Plugin URI: https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-cat
 Author: 5um17
 Author URI: https://www.secretsofgeeks.com
 Text Domain: wp-extended-search
-Version: 1.2
+Version: 1.3
 Description: Extend default search to search in selected post meta, taxonomies, post types and all authors.
 */
 

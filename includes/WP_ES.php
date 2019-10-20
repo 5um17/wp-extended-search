@@ -40,7 +40,10 @@ class WP_ES {
                 'post_types'        =>  array('post', 'page'),
                 'exclude_date'      => '',
                 'posts_per_page'    => '',
-                'terms_relation'    => 1
+                'terms_relation'    => 1,
+                'orderby'	    => '',
+                'order'		    => 'DESC',
+                'exact_match'	    => 'no'
             );
         return $settings;
     }
@@ -93,6 +96,8 @@ class WP_ES {
      */
     public function wp_es_pre_get_posts($query) {
         if (!empty($query->is_search) && !$this->is_bbPress_search()) {
+	    
+	    //Set post types
             if (!empty($this->WP_ES_settings['post_types'])) {
                 if (isset($_GET['post_type']) && in_array(esc_attr($_GET['post_type']), (array) $this->WP_ES_settings['post_types'])) {
                     $query->query_vars['post_type'] = (array) esc_attr($_GET['post_type']);
@@ -101,6 +106,7 @@ class WP_ES {
                 }
             }
 	    
+	    //Set date query to exclude resutls
             if (!empty($this->WP_ES_settings['exclude_date'])) {
                 $query->set('date_query', array(
                     array(
@@ -109,17 +115,35 @@ class WP_ES {
                 ));
             }
 	    
+	    //Set posts page page
             $posts_per_page = intval($this->WP_ES_settings['posts_per_page']); //Putting in extra line just to get rid off from WP svn pre-commit hook error.
             if (!empty($posts_per_page)) {
                 $query->set('posts_per_page', $posts_per_page);
             }
 	    
+	    //If searching for attachment type then set post status to inherit
 	    if ( is_array( $query->get( 'post_type' ) ) && in_array( 'attachment', $query->get( 'post_type' ) ) ) {
 		$query->set( 'post_status', array( 'publish', 'inherit' ) );
 		if ( is_user_logged_in() ) {
 		    $query->set( 'post_status', array( 'publish', 'inherit', 'private' ) );
 		    $query->set( 'perm', 'readable' ); //Check if current user can read private posts
 		}
+	    }
+	    
+	    //Set orderby
+	    if ( !empty( $this->WP_ES_settings['orderby'] ) ) {
+		$query->set( 'orderby', $this->WP_ES_settings[ 'orderby' ] );
+	    }
+	    
+	    //Set results order
+	    if ( in_array( $this->WP_ES_settings['order'], array( 'DESC', 'ASC' ), true ) && $this->WP_ES_settings['order'] !== 'DESC' ) {
+		$query->set( 'order', $this->WP_ES_settings[ 'order' ] );
+	    }
+	    
+	    //Set exact match
+	    if ( $this->WP_ES_settings[ 'exact_match' ] == 'yes' ) {
+		$query->set( 'exact', true );
+		$query->set( 'sentence', true );
 	    }
         }
     }

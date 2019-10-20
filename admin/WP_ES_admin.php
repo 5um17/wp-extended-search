@@ -69,8 +69,10 @@ class WP_ES_admin {
         add_settings_field( 'wp_es_include_authors', __('Author Setting' , 'wp-extended-search'), array($this, 'wp_es_author_settings'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_post_types', __('Select Post Types' , 'wp-extended-search'), array($this, 'wp_es_post_types_settings'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_terms_relation_type', __('Terms Relation Type' , 'wp-extended-search'), array($this, 'wp_es_terms_relation_type'), 'wp-es', 'wp_es_section_misc', array('label_for' => 'es_terms_relation') );
+	add_settings_field( 'wp_es_exact_search', __('Match the search term exactly' , 'wp-extended-search'), array($this, 'wp_es_exact_search'), 'wp-es', 'wp_es_section_misc' );
         add_settings_field( 'wp_es_exclude_older_results', __('Select date to exclude older results' , 'wp-extended-search'), array($this, 'wp_es_exclude_results'), 'wp-es', 'wp_es_section_misc', array('label_for' => 'es_exclude_date') );
         add_settings_field( 'wp_es_number_of_posts', __('Posts per page' , 'wp-extended-search'), array($this, 'wp_es_posts_per_page'), 'wp-es', 'wp_es_section_misc', array('label_for' => 'es_posts_per_page') );    
+        add_settings_field( 'wp_es_search_results_order', __('Search Results Order' , 'wp-extended-search'), array($this, 'wp_es_search_results_order'), 'wp-es', 'wp_es_section_misc', array('label_for' => 'es_search_results_order') );
     }
     
     /**
@@ -303,11 +305,17 @@ class WP_ES_admin {
      */
     public function wp_es_terms_relation_type() {
         global $WP_ES; ?>
-        <select id="es_terms_relation" name="wp_es_options[terms_relation]">
+	<select <?php echo $this->wp_es_disabled( $WP_ES->WP_ES_settings['exact_match'] , 'yes' ); ?> id="es_terms_relation" name="wp_es_options[terms_relation]">
             <option <?php selected($WP_ES->WP_ES_settings['terms_relation'], 1); ?> value="1"><?php _e('AND', 'wp-extended-search'); ?></option>
             <option <?php selected($WP_ES->WP_ES_settings['terms_relation'], 2); ?> value="2"><?php _e('OR', 'wp-extended-search'); ?></option>
         </select>
-        <p class="description"><?php _e('Type of query relation between search terms. e.g. someone search for "my query" then define the relation between "my" and "query". Default value is AND.', 'wp-extended-search'); ?></p><?php
+        <p class="description"><?php
+	    if ( $WP_ES->WP_ES_settings['exact_match'] == 'yes' ) {
+		_e('This option is disabled because you have selected "Match the search term exactly".  When using the exact match option, the sentence is not broken into terms instead the whole sentence is matched thus this option has no meaning.', 'wp-extended-search');
+	    } else {
+		_e('Type of query relation between search terms. e.g. someone searches for "my query" then define the relation between "my" and "query". The default value is AND.', 'wp-extended-search');
+	    } ?>
+	</p><?php
     }
     
     /**
@@ -332,6 +340,43 @@ class WP_ES_admin {
         <input min="-1" class="small-text" type="number" value="<?php echo esc_attr($WP_ES->WP_ES_settings['posts_per_page']); ?>" name="wp_es_options[posts_per_page]" id="es_posts_per_page" />
         <p class="description"><?php _e('Number of posts to display on search result page OR leave blank for default value.', 'wp-extended-search'); ?></p><?php
     }
+    
+    /**
+     * Search results order
+     * @since 1.3
+     * @global object $WP_ES
+     */
+    public function wp_es_search_results_order() { 
+	global $WP_ES; ?>
+	<select id="es_search_results_order" name="wp_es_options[orderby]">
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], ''); ?> value=""><?php _e('Relevance', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'date'); ?> value="date"><?php _e('Date', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'modified'); ?> value="modified"><?php _e('Last Modified Date', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'title'); ?> value="title"><?php _e('Post Title', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'name'); ?> value="name"><?php _e('Post Slug', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'type'); ?> value="type"><?php _e('Post Type', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'comment_count'); ?> value="comment_count"><?php _e('Number of Comments', 'wp-extended-search'); ?></option>
+	    <option <?php selected($WP_ES->WP_ES_settings['orderby'], 'rand'); ?> value="rand"><?php _e('Random', 'wp-extended-search'); ?></option>
+	</select>
+	<p class="description"><?php echo sprintf(__('Sort search results based on metadata of items. The default value is %1$sRelevance%2$s.', 'wp-extended-search'), '<a href="https://developer.wordpress.org/reference/classes/wp_query/#order-orderby-parameters">', '</a>'); ?></p>
+	<br />
+	<label><input <?php echo $this->wp_es_checked($WP_ES->WP_ES_settings['order'], array('DESC')); ?> type="radio" value="DESC" name="wp_es_options[order]" /><?php _e('Descending', 'wp-extended-search') ?></label>
+	<label><input <?php echo $this->wp_es_checked($WP_ES->WP_ES_settings['order'], array('ASC')); ?> type="radio" value="ASC" name="wp_es_options[order]" /><?php _e('Ascending', 'wp-extended-search') ?></label>
+	<p class="description"><?php _e('Order the sorted search items in Descending or Ascending. Default is Descending.', 'wp-extended-search'); ?></p><?php
+    }
+    
+    /**
+     * Select exact or partial term matching
+     * @since 1.3
+     * @global object $WP_ES
+     */
+    public function wp_es_exact_search() {
+	global $WP_ES; ?>
+	<label><input <?php echo $this->wp_es_checked($WP_ES->WP_ES_settings['exact_match'], array('yes')); ?> type="radio" value="yes" name="wp_es_options[exact_match]" /><?php _e('Yes', 'wp-extended-search'); ?></label>
+	<label><input <?php echo $this->wp_es_checked($WP_ES->WP_ES_settings['exact_match'], array('no')); ?> type="radio" value="no" name="wp_es_options[exact_match]" /><?php _e('No', 'wp-extended-search'); ?></label>
+	<p class="description"><?php _e('Whether to match search term exactly or partially e.g. If someone search "Word" it will display items matching "WordPress" or "Word" but if you select Yes then it will display items only matching "Word". The default value is No.', 'wp-extended-search'); ?></p><?php
+    
+    }
 
     /**
      * return checked if value exist in array
@@ -350,6 +395,21 @@ class WP_ES_admin {
         return $checked;
     }
     
+    /**
+     * Return disabled if both values are equal
+     * @since 1.3
+     * @param mixed $first_value First value to compare
+     * @param mixed $second_value Second value to compare
+     * @return string disabled="disabled" or blank string
+     */
+    public function wp_es_disabled( $first_value, $second_value = true ) {
+	if ( $first_value == $second_value ) {
+	    return 'disabled="disabled"';
+	}
+	
+	return '';
+    }
+
     /**
      * Add docs and other links to plugin row meta
      * @since 1.2
@@ -375,7 +435,7 @@ class WP_ES_admin {
     
     /**
      * Add setting link to plugin action list.
-     * @since dev
+     * @since 1.3
      * @param array $links action links
      * @return array $links new action links
      */
