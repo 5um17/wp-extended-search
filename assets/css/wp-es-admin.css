@@ -5,3 +5,20 @@
 
 .wpes-meta-keys-wrapper { columns: auto 3; -moz-columns: auto 3; -webkit-columns: auto 3; }
 .form-table .wpes-meta-keys-wrapper p { margin: 0; }
+
+.wpes-params dt { font-family: Consolas, Monaco, monospace;font-weight: 700; }
+.wpes-params p { margin: 0; }
+.wpes-params dd { margin-bottom: 12px; }
+#wpes-cpt-info .inside h2 {font-size: 18px;padding: 9px 0 4px 0;}
+#wpes-cpt-info td {position: relative;}
+.wpes-display-input { min-width: 100%; resize: none; font-family: Consolas, Monaco, monospace; }
+.wpes-copied {
+	font-size: 11px;
+	background: green;
+	color: white;
+	font-weight: 600;
+	padding: 2px 4px;
+	position: absolute;
+	top: 35%;
+	right: 2%;
+}

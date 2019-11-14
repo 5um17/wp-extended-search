@@ -6,6 +6,8 @@
  */
 class WP_ES_admin {
     
+    private $all_setting_posts = array();
+
     /**
      * Default Constructor
      * @since 1.0
@@ -102,7 +104,10 @@ class WP_ES_admin {
 		'admin_setting_page' => admin_url('admin.php?page=wp-es'),
 		'new_setting_url' => admin_url('post-new.php?post_type=wpes_setting')
 	    ) );
-        }
+        } else if ( get_current_screen()->id === 'wpes_setting' ) {
+	    wp_enqueue_style('wpes_admin_css', WP_ES_URL . 'assets/css/wp-es-admin.css');
+	    wp_enqueue_script('wpes_admin_cpt_js', WP_ES_URL . 'assets/js/wp-es-setting-cpt.js');
+	}
     }
 
     /**
@@ -186,14 +191,22 @@ class WP_ES_admin {
         //to be used in futrue
     }
     
-    public function wp_es_settings_name() {
-        $all_settings = get_posts(array(
-	    'post_type'		=> 'wpes_setting',
-	    'posts_per_page'	=>  -1,
-	    'orderby'		=> 'title',
-	    'order'		=> 'ASC'
-	));
+    public function get_all_setting_names() {
+	if ( empty( $this->all_setting_posts ) ) {
+	    $this->all_setting_posts = get_posts( array(
+		'post_type'		=> 'wpes_setting',
+		'posts_per_page'	=>  -1,
+		'orderby'		=> 'title',
+		'order'			=> 'ASC'
+	    ) );
+	}
 	
+	return $this->all_setting_posts;
+    }
+
+    public function wp_es_settings_name() {
+	
+	$all_settings = $this->get_all_setting_names();
 //	print_r($all_settings); die;
 	?>
         

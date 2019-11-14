@@ -27,6 +27,8 @@ if ( ! defined( 'WP_ES_Filename' ) ) {
 
 /* Includes library files */
 require_once WP_ES_DIR . '/includes/WP_ES.php';
+require_once WP_ES_DIR . '/includes/WP_ES_searchform.php';
+require_once WP_ES_DIR . '/includes/WP_ES_search_widget.php';
 
 /* Includes admin files */
 if (is_admin()) {
@@ -34,8 +36,30 @@ if (is_admin()) {
     require_once WP_ES_DIR . '/admin/WP_ES_setting_post_type.php';
 }
 
+/* Public functions */
+
+/**
+ * WPES functions
+ * @return object returns WP_ES instance
+ */
 function WPES() {
     return WP_ES::instance();
 }
 
+/**
+ * Print or return WPES search form
+ * @param array $args Search form arguments
+ * @param bool $print true for print false to return. Default true
+ * @return string Search form HTML
+ */
+function WPES_search_form( $args, $print = true ) {
+    if ( $print == true ) {
+	echo WPES()->WP_ES_searchform->get_search_form( $args );
+	return;
+    }
+    
+    return WPES()->WP_ES_searchform->get_search_form( $args );
+}
+
+// Start the show <3
 WPES();

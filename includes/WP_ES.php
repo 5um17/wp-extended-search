@@ -4,13 +4,14 @@
  *
  * @author 5um17
  */
-class WP_ES {
+final class WP_ES {
 
     /* Defaults Variable */
-    public $WP_ES_settings = '';
-    public $current_setting_id = false;
-    public $option_key_name = 'wp_es_options';
+    private $WP_ES_settings = '';
+    private $current_setting_id = false;
+    private $option_key_name = 'wp_es_options';
     public static $instance = false;
+    public $WP_ES_searchform = false;
 
     /**
      * Default Constructor
@@ -19,7 +20,7 @@ class WP_ES {
     public function __construct() {
 	
 	if ( is_admin() ) {
-	    new WP_ES_admin();
+	    $this->WP_ES_admin = new WP_ES_admin();
 	    new WP_ES_setting_post_type();
 	}
         
@@ -31,8 +32,17 @@ class WP_ES {
         }
         
         add_action('plugins_loaded', array($this, 'wp_es_plugin_loaded'));
+	add_action( 'widgets_init', array( $this, 'wp_es_register_widgets' ) );
     }
     
+    public function __get( $name ) {
+	if ( isset( $this->$name ) ) {
+	    return $this->$name;
+	}
+	
+	return false;
+    }
+
     public static function instance() {
         if ( empty( self::$instance ) ) {
             self::$instance = new self();
@@ -69,6 +79,10 @@ class WP_ES {
      * @since 1.0
      */
     public function wp_es_options() {
+	
+	if ( !empty( $this->WP_ES_settings ) ) {
+	    return $this->WP_ES_settings;
+	}
         
         if ( ! empty( $_REQUEST[ 'wpessid' ] ) ) {
 	    $wpessid = intval( $_REQUEST[ 'wpessid' ] );
@@ -87,7 +101,12 @@ class WP_ES {
      * @since 1.0.1
      */
     public function wp_es_plugin_loaded() {
+	$this->WP_ES_searchform = new WP_ES_searchform();
         load_plugin_textdomain( 'wp-extended-search', false, dirname( plugin_basename( WP_ES_DIR . 'wp-es.php' ) ) . '/languages' );
+    }
+    
+    public function wp_es_register_widgets() {
+	register_widget( 'WP_ES_search_widget' );
     }
 
     /**
