@@ -2,7 +2,7 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search results, posts per page, exact search
 Requires at least: 4.0
-Tested up to: 5.2.4
+Tested up to: 5.3
 Stable tag: 1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
