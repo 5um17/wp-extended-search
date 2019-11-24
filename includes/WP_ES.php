@@ -17,7 +17,7 @@ class WP_ES {
         
         $this->WP_ES_settings = $this->wp_es_options();
         
-        if ( !is_admin() || (defined('DOING_AJAX') && DOING_AJAX && !$this->wp_core_actions()) ) {
+        if ( !is_admin() || ( defined('DOING_AJAX') && DOING_AJAX && !$this->preserved_ajax_actions() ) ) {
             //Only filter non admin requests!
             add_action('init', array($this,'wp_es_init'));
         }
@@ -317,17 +317,20 @@ class WP_ES {
      * @since 1.1.2
      * @return boolean TRUE if it core Ajax request else false
      */
-    public function wp_core_actions() {
-        $wp_core_actions = array(
+    public function preserved_ajax_actions() {
+        $preserved_actions = array(
             'query-attachments',
-	    'menu-quick-search'
+	    'menu-quick-search',
+	    'acf/fields'
         );
         
         $current_action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : false;
         
-        if (in_array($current_action ,$wp_core_actions)) {
-            return TRUE;
-        }
+	foreach ( $preserved_actions as $action ) {
+	    if ( strpos( $current_action, $action ) !== FALSE ) {
+		return TRUE;
+	    }
+	}
         
         return FALSE;
     }
