@@ -51,11 +51,22 @@ class WP_ES_admin {
 	    <?php settings_errors(); ?>
 
             <form method="post" action="options.php"><?php
-                settings_fields('wp_es_option_group');	
+		$settings = WPES()->WP_ES_settings;
+                
+		settings_fields('wp_es_option_group');	
                 do_settings_sections('wp-es');
-                submit_button(__('Save Changes'), 'primary', 'submit', false);
-                echo '&nbsp;&nbsp;';
-                submit_button(__('Reset to WP default', 'wp-extended-search'), 'secondary', 'reset', false); ?>
+		
+		if ( empty( $settings['disabled'] ) ) {
+		    submit_button(__('Save Changes'), 'primary', 'submit', false);
+		    echo '&nbsp;&nbsp;';
+		    submit_button(__('Reset to WP default'), 'secondary', 'reset', false);
+		    if ( empty( WPES()->current_setting_id ) ) {
+			echo '&nbsp;&nbsp;';
+			submit_button(__('Disable WPES for global search'), 'secondary', 'disable_global', false);
+		    }
+		} else {
+		    submit_button(__('Enable WPES for global search'), 'primary', 'enable_global', false);
+		} ?>
             </form>
             
         </div><?php
@@ -66,16 +77,22 @@ class WP_ES_admin {
      * @since 1.0
      */
     public function WP_ES_admin_init(){
+	$settings = WPES()->WP_ES_settings;
 
         /* Register Settings */
         register_setting('wp_es_option_group', WPES()->option_key_name, array($this, 'wp_es_save'));
         
         /* Add Section */
-        add_settings_section( 'wp_es_section_1', __('Select Fields to include in WordPress default Search', 'wp-extended-search' ), array($this, 'wp_es_section_content'), 'wp-es' );	
-        add_settings_section( 'wp_es_section_misc', __('Miscellaneous Settings', 'wp-extended-search' ), array($this, 'wp_es_section_content_misc'), 'wp-es' );
+	if ( empty( $settings['disabled'] ) ) {
+	    add_settings_section( 'wp_es_section_1', __('Select Fields to include in WordPress default Search', 'wp-extended-search' ), array($this, 'wp_es_section_content'), 'wp-es' );
+	    add_settings_section( 'wp_es_section_misc', __('Miscellaneous Settings', 'wp-extended-search' ), array($this, 'wp_es_section_content_misc'), 'wp-es' );
+	} else {
+	    add_settings_section( 'wp_es_section_disabled', __('WPES is disabled for global WordPress search. Select setting name to manage other search settings.', 'wp-extended-search' ), NULL, 'wp-es' );
+	}
 
         /* Add fields */
         add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_1' );
+        add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_disabled' );
         add_settings_field( 'wp_es_title_and_post_content', __('General Search Setting', 'wp-extended-search'), array($this, 'wp_es_title_content_checkbox'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_custom_fields', __('Select Meta Key Names' , 'wp-extended-search'), array($this, 'wp_es_custom_field_name_list'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_taxonomies', __('Select Taxonomies' , 'wp-extended-search'), array($this, 'wp_es_taxonomies_settings'), 'wp-es', 'wp_es_section_1' );
@@ -107,6 +124,10 @@ class WP_ES_admin {
         } else if ( get_current_screen()->id === 'wpes_setting' ) {
 	    wp_enqueue_style('wpes_admin_css', WP_ES_URL . 'assets/css/wp-es-admin.css');
 	    wp_enqueue_script('wpes_admin_cpt_js', WP_ES_URL . 'assets/js/wp-es-setting-cpt.js');
+	    
+	    wp_localize_script( 'wpes_admin_cpt_js', 'wpes_admin_cpt_vars', array(
+		'str_copy'  =>	__( 'copied', 'wp-extended-search' )
+	    ) );
 	}
     }
 
@@ -151,7 +172,19 @@ class WP_ES_admin {
      */
     public function wp_es_save($input){
         $settings = WPES()->WP_ES_settings;
+	
+	if ( isset( $_POST['disable_global'] ) ) {
+	    $input['disabled'] = true;
+	    add_settings_error('wp_es_error', 'wp_es_error_disable_global', __('WPES for global search has been disabled.', 'wp-extended-search'), 'updated');
+	    return $input;
+	}
         
+	if ( isset( $_POST['enable_global'] ) ) {
+	    $settings['disabled'] = false;
+	    add_settings_error('wp_es_error', 'wp_es_error_enable_global', __('WPES for global search has been enabled.', 'wp-extended-search'), 'updated');
+	    return $settings;
+	}
+	
         if (isset($_POST['reset'])) {
             add_settings_error('wp_es_error', 'wp_es_error_reset', __('Settings has been changed to WordPress default search setting.', 'wp-extended-search'), 'updated');
             return WPES()->default_options();
@@ -217,6 +250,10 @@ class WP_ES_admin {
             } ?>
             <option value="new"><?php _e('Create New', 'wp-extended-search'); ?></option>
         </select><?php
+
+	if ( !empty( WPES()->current_setting_id ) ) {
+	    echo '&nbsp;<a href="' . get_edit_post_link( WPES()->current_setting_id ) . '">' . __( 'Edit Name', 'wp-extended-search' ) . '</a>';
+	}
     }
 
     /**
@@ -368,7 +405,6 @@ class WP_ES_admin {
      * @global object $WP_ES
      */
     public function wp_es_exclude_results() { ?>
-        <script type="text/javascript">jQuery(document).ready(function (){ jQuery('#es_exclude_date').datepicker({ maxDate: new Date(), changeYear: true, dateFormat: "MM dd, yy" }); });</script>
         <input class="regular-text" type="text" value="<?php echo esc_attr(WPES()->WP_ES_settings['exclude_date']); ?>" name="<?php echo WPES()->option_key_name; ?>[exclude_date]" id="es_exclude_date" />
         <p class="description"><?php _e('Contents will not appear in search results older than this date OR leave blank to disable this feature.', 'wp-extended-search'); ?></p><?php
     }

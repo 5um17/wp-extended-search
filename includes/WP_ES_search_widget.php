@@ -69,12 +69,13 @@ class WP_ES_search_widget extends WP_Widget {
 	    
 	<p>
 	    <label for="<?php echo $this->get_field_id('wpessid'); ?>"><?php _e('Setting Name:'); ?></label>
-	    <select id="<?php echo $this->get_field_id('wpessid'); ?>" name="<?php echo $this->get_field_name('wpessid'); ?>">
+	    <select class="widefat" id="<?php echo $this->get_field_id('wpessid'); ?>" name="<?php echo $this->get_field_name('wpessid'); ?>">
 		<option value=""><?php _e('Global (default)', 'wp-extended-search'); ?></option><?php
 		foreach ($all_settings as $setting_name) { ?>
 		    <option <?php selected( $setting_name->ID, $instance['wpessid'] ); ?> value="<?php echo $setting_name->ID; ?>"><?php echo get_the_title($setting_name); ?></option><?php
 		} ?>
 	    </select>
-	</p><?php
+	</p>
+	<p class="help"><?php printf( __( 'To add new setting click <a href="%s">here</a>.', 'wp-extended-search' ), admin_url('post-new.php?post_type=wpes_setting') ); ?></p><?php
     }
 }

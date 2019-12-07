@@ -14,11 +14,15 @@
 .wpes-display-input { min-width: 100%; resize: none; font-family: Consolas, Monaco, monospace; }
 .wpes-copied {
 	font-size: 11px;
-	background: green;
-	color: white;
+	background: #00a100;
+	color: #fff;
 	font-weight: 600;
 	padding: 2px 4px;
 	position: absolute;
-	top: 35%;
-	right: 2%;
+	top: 22px;
+	right: 15px;
+}
+#wpes-cpt-configure-setting .button {
+	width: 100%;
+	text-align: center;
 }

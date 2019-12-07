@@ -42,6 +42,14 @@ final class WP_ES {
 	
 	return false;
     }
+    
+    public function __isset( $name ) {
+	if ( isset($this->$name) ) {
+	    return true;
+	}
+	
+	return false;
+    }
 
     public static function instance() {
         if ( empty( self::$instance ) ) {
@@ -57,6 +65,7 @@ final class WP_ES {
      */
     public function default_options() {
         $settings = array(
+		'disabled'	    =>	false,
                 'title'             =>  true,
                 'content'           =>  true,
                 'excerpt'           =>  true,
@@ -115,13 +124,14 @@ final class WP_ES {
      * @return NULL
      */
     public function wp_es_init() {
+	$enabled = !$this->WP_ES_settings['disabled'];
         
         /**
          * Filter plugin's all action hooks to enabled or disabled
          * @since 1.0.1
          * @param bool true to enable or false to disable
          */
-        if (!apply_filters('wpes_enabled', TRUE)) {
+        if (!apply_filters('wpes_enabled', $enabled)) {
             return;
         }
         

@@ -16,5 +16,11 @@ jQuery(document).ready(function (){
             window.location.href = wpes_admin_vars.admin_setting_page;
         }
     });
+    
+    jQuery('#es_exclude_date').datepicker({ 
+        maxDate: new Date(),
+        changeYear: true,
+        dateFormat: "MM dd, yy" 
+    });
 });
 
