@@ -95,6 +95,11 @@ class WP_ES {
      * @param object $query wp_query object
      */
     public function wp_es_pre_get_posts($query) {
+        // Allow plugins to have custom search queries
+        if ( !apply_filters('wpes_pre_get_posts_enabled', TRUE, $query) ) {
+            return;
+        }
+        
         if (!empty($query->is_search) && !$this->is_bbPress_search()) {
 	    
 	    //Set post types
