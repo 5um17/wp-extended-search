@@ -15,7 +15,35 @@ class WP_ES_search_widget extends WP_Widget {
 	parent::__construct( false , 'WPES ' . __( 'Search Form', 'wp-extended-search' ), $options );
     }
     
+    private function translate_strings( $instance, $register = false ) {
+	$translatable_keys = array(
+	    'submit_button_label'   =>	'Search Button Label',
+	    'input_box_placeholder' =>	'Search Bar Placeholder',
+	    'aria_label'	    =>	'Form Aria Label'
+	);
+	
+	foreach ( $translatable_keys as $key => $string_name ) {
+	    if ( !empty( $instance[ $key ] ) ) {
+		if ( !empty( $register ) ) {
+		    do_action( 'wpml_register_single_string', 'Widgets', $string_name, $instance[ $key ] );
+		} else {
+		    $instance[ $key ] = apply_filters( 'wpml_translate_single_string', $instance[ $key ], 'Widgets', $string_name );
+		}
+	    }
+	}
+	
+	return $instance;
+    }
+
     public function widget( $args, $instance ) {
+	
+	if ( !empty( WPES()->current_setting_id ) && WPES()->current_setting_id != $instance['wpessid'] ) {
+	    return '';
+	}
+	
+	if ( WPES()->is_WPML_active( 'ST' ) ) {
+	    $instance = $this->translate_strings( $instance );
+	}
 	
 	$title = ! empty( $instance['title'] ) ? $instance['title'] : '';
 
@@ -43,6 +71,10 @@ class WP_ES_search_widget extends WP_Widget {
 		$instance[ $key ] = intval( $new_instance[ $key ] );
 	    }
 	    $instance[ $key ] = sanitize_text_field( $new_instance[ $key ] );
+	}
+	
+	if ( WPES()->is_WPML_active( 'ST' ) ) {
+	    $this->translate_strings( $instance, true );
 	}
 
 	return $instance;

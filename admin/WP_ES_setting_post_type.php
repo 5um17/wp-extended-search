@@ -8,6 +8,7 @@ class WP_ES_setting_post_type {
     
     public function __construct() {
 	add_action( 'init', array( $this, 'register_setting_posttype') );
+	add_action('admin_head', array( $this, 'remove_wpml_meta_box' ) );
 	add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 	add_action( 'post_submitbox_misc_actions', array( $this, 'post_submit_box_js' ) );
 	add_filter( 'post_row_actions', array( $this, 'remove_quick_edit' ), 10, 2 );
@@ -153,6 +154,10 @@ class WP_ES_setting_post_type {
 		</dd><?php
 	    } ?>
 	</dl><?php
+    }
+    
+    public function remove_wpml_meta_box() {
+	remove_meta_box('icl_div_config', 'wpes_setting', 'normal');
     }
     
 }

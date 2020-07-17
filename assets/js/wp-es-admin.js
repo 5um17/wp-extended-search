@@ -17,6 +17,15 @@ jQuery(document).ready(function (){
         }
     });
     
+    jQuery('#es_wc_search').change(function (){
+        var response = confirm( wpes_admin_vars.wc_setting_alert_txt );
+        if (response) {
+            jQuery('#submit').trigger('click');
+        } else {
+            jQuery(this).prop('checked', !jQuery(this).prop('checked'));
+        }
+    });
+    
     jQuery('#es_exclude_date').datepicker({ 
         maxDate: new Date(),
         changeYear: true,

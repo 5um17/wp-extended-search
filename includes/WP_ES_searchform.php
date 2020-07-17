@@ -58,6 +58,10 @@ class WP_ES_searchform {
 	
 	$args = wp_parse_args( $args, $this->form_default_args );
 	
+	if ( !empty( WPES()->current_setting_id ) && WPES()->current_setting_id != $args['wpessid'] ) {
+	    return '';
+	}
+	
 	/**
 	 * @link https://core.trac.wordpress.org/browser/tags/5.2/src/wp-includes/general-template.php#L171
 	 */

@@ -59,13 +59,13 @@ class WP_ES_admin {
 		if ( empty( $settings['disabled'] ) ) {
 		    submit_button(__('Save Changes'), 'primary', 'submit', false);
 		    echo '&nbsp;&nbsp;';
-		    submit_button(__('Reset to WP default'), 'secondary', 'reset', false);
+		    submit_button(__('Reset to WP default', 'wp-extended-search'), 'secondary', 'reset', false);
 		    if ( empty( WPES()->current_setting_id ) ) {
 			echo '&nbsp;&nbsp;';
-			submit_button(__('Disable WPES for global search'), 'secondary', 'disable_global', false);
+			submit_button(__('Disable WPES for global search', 'wp-extended-search'), 'secondary', 'disable_global', false);
 		    }
 		} else {
-		    submit_button(__('Enable WPES for global search'), 'primary', 'enable_global', false);
+		    submit_button(__('Enable WPES for global search', 'wp-extended-search'), 'primary', 'enable_global', false);
 		} ?>
             </form>
             
@@ -93,6 +93,7 @@ class WP_ES_admin {
         /* Add fields */
         add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_disabled' );
+        add_settings_field( 'wp_es_wc_search', __('WooCommerce', 'wp-extended-search'), array($this, 'wp_es_wc_search'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_title_and_post_content', __('General Search Setting', 'wp-extended-search'), array($this, 'wp_es_title_content_checkbox'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_custom_fields', __('Select Meta Key Names' , 'wp-extended-search'), array($this, 'wp_es_custom_field_name_list'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_taxonomies', __('Select Taxonomies' , 'wp-extended-search'), array($this, 'wp_es_taxonomies_settings'), 'wp-es', 'wp_es_section_1' );
@@ -119,7 +120,8 @@ class WP_ES_admin {
 	    
 	    wp_localize_script( 'wpes_admin_js', 'wpes_admin_vars', array(
 		'admin_setting_page' => admin_url('admin.php?page=wp-es'),
-		'new_setting_url' => admin_url('post-new.php?post_type=wpes_setting')
+		'new_setting_url' => admin_url('post-new.php?post_type=wpes_setting'),
+		'wc_setting_alert_txt' => __( 'The setting will be saved before you can make further changes.', 'wp-extended-search' )
 	    ) );
         } else if ( get_current_screen()->id === 'wpes_setting' ) {
 	    wp_enqueue_style('wpes_admin_css', WP_ES_URL . 'assets/css/wp-es-admin.css');
@@ -254,6 +256,14 @@ class WP_ES_admin {
 	if ( !empty( WPES()->current_setting_id ) ) {
 	    echo '&nbsp;<a href="' . get_edit_post_link( WPES()->current_setting_id ) . '">' . __( 'Edit Name', 'wp-extended-search' ) . '</a>';
 	}
+    }
+    
+    public function wp_es_wc_search() {
+	$settings = WPES()->WP_ES_settings; ?>
+	
+	<input type="hidden" name="<?php echo WPES()->option_key_name; ?>[wc_search]" value="0" />
+        <input <?php checked($settings['wc_search']); ?> type="checkbox" id="es_wc_search" name="<?php echo WPES()->option_key_name; ?>[wc_search]" value="1" />&nbsp;
+        <label for="es_wc_search"><?php _e('Optimize for Products Search', 'wp-extended-search'); ?></label><?php
     }
 
     /**

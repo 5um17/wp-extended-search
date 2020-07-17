@@ -1,0 +1,15 @@
+<wpml-config>
+    <custom-types>
+        <custom-type translate="0">wpes_setting</custom-type>
+    </custom-types>
+    <shortcodes>
+        <shortcode>
+            <tag>wpes_search_form</tag>
+            <attributes>
+                <attribute>submit_button_label</attribute>
+                <attribute>input_box_placeholder</attribute>
+                <attribute>aria_label</attribute>
+            </attributes>
+        </shortcode>
+    </shortcodes>
+</wpml-config>

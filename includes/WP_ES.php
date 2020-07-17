@@ -66,6 +66,7 @@ final class WP_ES {
     public function default_options() {
         $settings = array(
 		'disabled'	    =>	false,
+		'wc_search'	    =>	false,
                 'title'             =>  true,
                 'content'           =>  true,
                 'excerpt'           =>  true,
@@ -140,6 +141,13 @@ final class WP_ES {
         
         /* Action for modify query arguments */
         add_action( 'pre_get_posts' , array($this, 'wp_es_pre_get_posts'), 500);
+	
+	add_filter( 'icl_lang_sel_copy_parameters', array( $this, 'wpml_ls_copy_query_str' ) );
+	
+	if ( $this->is_WC_search() ) {
+	    add_filter( 'wpes_meta_keys', array( $this, 'wc_enable_product_hidden_fields' ) );
+	    add_filter( 'pre_get_posts', array( $this, 'set_wc_archive_page' ), 9 );
+	}
     }
     
     /**
@@ -400,5 +408,58 @@ final class WP_ES {
         }
         
         return FALSE;
+    }
+    
+    public function is_WPML_active( $addon = '' ) {
+	$addons = array(
+	    'ST'    =>	'WPML_ST_VERSION',
+	    'TM'    =>	'WPML_TM_VERSION',
+	    'WCML'  =>	'WCML_VERSION'
+	);
+	
+	if ( defined('ICL_SITEPRESS_VERSION') ) {
+	    if ( isset( $addons[$addon] ) ) {
+		return defined( $addons[$addon] ) ? true : false;
+	    }
+	    
+	    return true;
+	}
+	
+	return false;
+    }
+    
+    public function wpml_ls_copy_query_str( $parameters ) {
+	if ( !is_array( $parameters ) ) {
+	    return array( 'wpessid' );
+	}
+	
+	if ( !in_array( 'wpessid', $parameters ) ) {
+	    array_push( $parameters, 'wpessid' );
+	    return $parameters;
+	}
+	
+	return $parameters;
+    }
+    
+    public function is_WC_search() {
+	if ( defined( 'WC_VERSION' ) ) {
+	    return $this->WP_ES_settings['wc_search'];
+	}
+	
+	return false;
+    }
+
+    public function wc_enable_product_hidden_fields( $fields ) {
+	$fields[] = '_sku';
+	$fields[] = '_purchase_note';
+	$fields[] = '_product_attributes';
+	
+	return array_unique( $fields );
+    }
+    
+    public function set_wc_archive_page( $query ) {
+	$query->set('post_type', 'product');
+	$query->is_archive = true;
+	$query->is_post_type_archive = true;
     }
 }
