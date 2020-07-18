@@ -2,7 +2,8 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search results, posts per page, exact search
 Requires at least: 4.0
-Tested up to: 5.3
+Tested up to: 5.4.2
+Requires PHP: 7.0
 Stable tag: 1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -40,12 +41,6 @@ You can include or exclude post types to appear in search results.
   Or
   Download WP Extended Search and upload it to your webserver via your FTP application. The WordPress codex contains [instructions on how to do this here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 * Activate the plugin and navigate to (Settings > Extended Search) to choose your desired search settings.
-
-== Frequently Asked Questions ==
-
-= Do you have any question? =
-
-Please use plugin [support forum](https://wordpress.org/support/plugin/wp-extended-search) 
 
 == Screenshots ==
 1. WP Extented Search settings page

@@ -313,7 +313,7 @@ class WP_ES {
     }
     
     /**
-     * Check if it is WordPress core Ajax action
+     * Check if it is WordPress core or some plugin Ajax action
      * @since 1.1.2
      * @return boolean TRUE if it core Ajax request else false
      */
@@ -321,7 +321,8 @@ class WP_ES {
         $preserved_actions = array(
             'query-attachments',
 	    'menu-quick-search',
-	    'acf/fields'
+	    'acf/fields',
+	    'elementor_ajax'
         );
         
         $current_action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : false;

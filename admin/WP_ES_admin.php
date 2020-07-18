@@ -43,7 +43,7 @@ class WP_ES_admin {
                 do_settings_sections('wp-es');
                 submit_button(__('Save Changes'), 'primary', 'submit', false);
                 echo '&nbsp;&nbsp;';
-                submit_button(__('Reset to WP default'), 'secondary', 'reset', false); ?>
+                submit_button(__('Reset to WP default', 'wp-extended-search'), 'secondary', 'reset', false); ?>
             </form>
             
         </div><?php
