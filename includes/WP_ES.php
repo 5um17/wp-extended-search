@@ -95,12 +95,7 @@ class WP_ES {
      * @param object $query wp_query object
      */
     public function wp_es_pre_get_posts($query) {
-        // Allow plugins to have custom search queries
-        if ( !apply_filters('wpes_pre_get_posts_enabled', TRUE, $query) ) {
-            return;
-        }
-        
-        if (!empty($query->is_search) && !$this->is_bbPress_search()) {
+        if ( !empty( $query->is_search ) && !empty( $query->get( 's' ) ) && empty( $query->get( 'disable_wpes' ) ) && !$this->is_bbPress_search() ) {
 	    
 	    //Set post types
             if (!empty($this->WP_ES_settings['post_types'])) {
@@ -164,8 +159,8 @@ class WP_ES {
     public function wp_es_custom_query( $search, $wp_query ) {
         global $wpdb;
         
-        if ( empty( $search ) || !empty($wp_query->query_vars['suppress_filters']) ) {
-            return $search; // skip processing - If no search term in query or suppress_filters is true
+        if ( empty( $search ) || !empty( $wp_query->query_vars['suppress_filters'] ) || !empty( $wp_query->get('disable_wpes') ) ) {
+            return $search; // skip processing - If no search term in query or suppress_filters is true or disable_wpes is true
         }
         
         $q = $wp_query->query_vars;
