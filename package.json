@@ -1,0 +1,22 @@
+{
+  "name": "wp-extended-search",
+  "version": "2.0.0",
+  "description": "Extend default search to search in selected post meta, taxonomies, post types and all authors.",
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5um17/wp-extended-search.git"
+  },
+  "author": "5um17",
+  "license": "GPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/5um17/wp-extended-search/issues"
+  },
+  "homepage": "https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html",
+  "devDependencies": {
+    "grunt": "^1.2.1",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-wp-i18n": "^1.0.3"
+  }
+}

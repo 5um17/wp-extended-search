@@ -1,0 +1,23 @@
+{
+    "name": "5um17/wp-extended-search",
+    "description": "Extend default search to search in selected post meta, taxonomies, post types and all authors.",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "5um17",
+            "email": "5um17@secretsofgeeks.com"
+        }
+    ],
+    "scripts": {
+        "wpcs" : ".\\vendor\\bin\\phpcs --colors --standard=WordPress-Core,WordPress-Docs",
+        "wpcb" : ".\\vendor\\bin\\phpcbf --standard=WordPress-Core,WordPress-Docs"
+    },
+    "require": {
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+        "wp-coding-standards/wpcs": "^2.3",
+        "squizlabs/php_codesniffer": "^3.5"
+    }
+}

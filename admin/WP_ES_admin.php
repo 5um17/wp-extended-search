@@ -93,7 +93,9 @@ class WP_ES_admin {
         /* Add fields */
         add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_settings_name', __('Setting Name', 'wp-extended-search'), array($this, 'wp_es_settings_name'), 'wp-es', 'wp_es_section_disabled' );
-        add_settings_field( 'wp_es_wc_search', __('WooCommerce', 'wp-extended-search'), array($this, 'wp_es_wc_search'), 'wp-es', 'wp_es_section_1' );
+        if ( class_exists( 'WooCommerce' ) ) {
+	    add_settings_field( 'wp_es_wc_search', __('WooCommerce', 'wp-extended-search'), array($this, 'wp_es_wc_search'), 'wp-es', 'wp_es_section_1' );
+	}
         add_settings_field( 'wp_es_title_and_post_content', __('General Search Setting', 'wp-extended-search'), array($this, 'wp_es_title_content_checkbox'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_custom_fields', __('Select Meta Key Names' , 'wp-extended-search'), array($this, 'wp_es_custom_field_name_list'), 'wp-es', 'wp_es_section_1' );
         add_settings_field( 'wp_es_list_taxonomies', __('Select Taxonomies' , 'wp-extended-search'), array($this, 'wp_es_taxonomies_settings'), 'wp-es', 'wp_es_section_1' );

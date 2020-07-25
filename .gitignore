@@ -1,0 +1,6 @@
+/node_modules
+/languages
+/package-lock.json
+/build
+/vendor
+/composer.lock

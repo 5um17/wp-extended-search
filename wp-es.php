@@ -27,13 +27,13 @@ if ( ! defined( 'WP_ES_Filename' ) ) {
 
 /* Includes library files */
 require_once WP_ES_DIR . '/includes/WP_ES.php';
-require_once WP_ES_DIR . '/includes/WP_ES_searchform.php';
-require_once WP_ES_DIR . '/includes/WP_ES_search_widget.php';
+require_once WP_ES_DIR . '/includes/class-wpes-search-form.php';
+require_once WP_ES_DIR . '/includes/class-wpes-search-widget.php';
 
 /* Includes admin files */
 if (is_admin()) {
     require_once WP_ES_DIR . '/admin/WP_ES_admin.php';
-    require_once WP_ES_DIR . '/admin/WP_ES_setting_post_type.php';
+    require_once WP_ES_DIR . '/admin/class-wpes-settings-cpt.php';
 }
 
 /* Public functions */
@@ -54,11 +54,11 @@ function WPES() {
  */
 function WPES_search_form( $args, $print = true ) {
     if ( $print == true ) {
-	echo WPES()->WP_ES_searchform->get_search_form( $args );
+	echo WPES()->WPES_Search_Form->get_search_form( $args );
 	return;
     }
     
-    return WPES()->WP_ES_searchform->get_search_form( $args );
+    return WPES()->WPES_Search_Form->get_search_form( $args );
 }
 
 // Start the show <3

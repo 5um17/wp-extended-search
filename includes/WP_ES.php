@@ -11,7 +11,9 @@ final class WP_ES {
     private $current_setting_id = false;
     private $option_key_name = 'wp_es_options';
     public static $instance = false;
-    public $WP_ES_searchform = false;
+    public $WPES_Search_Form = false;
+    public $WPES_WC = false;
+    public $wpes_wpml = false;
 
     /**
      * Default Constructor
@@ -21,7 +23,7 @@ final class WP_ES {
 	
 	if ( is_admin() ) {
 	    $this->WP_ES_admin = new WP_ES_admin();
-	    new WP_ES_setting_post_type();
+	    new WPES_Settings_CPT();
 	}
         
         $this->WP_ES_settings = $this->wp_es_options();
@@ -111,12 +113,21 @@ final class WP_ES {
      * @since 1.0.1
      */
     public function wp_es_plugin_loaded() {
-	$this->WP_ES_searchform = new WP_ES_searchform();
+	$this->WPES_Search_Form = new WPES_Search_Form();
+	if ( class_exists( 'WooCommerce' ) && !empty( $this->WP_ES_settings['wc_search'] ) ) {
+	    require_once WP_ES_DIR . '/includes/integrations/class-wpes-wc.php';
+	    $this->WPES_WC = new WPES_WC();
+	}
+	
+	if ( class_exists( 'SitePress' ) ) {
+		require_once WP_ES_DIR . '/includes/integrations/class-wpes-wpml.php';
+		$this->wpes_wpml = new WPES_WPML();
+	}
         load_plugin_textdomain( 'wp-extended-search', false, dirname( plugin_basename( WP_ES_DIR . 'wp-es.php' ) ) . '/languages' );
     }
     
     public function wp_es_register_widgets() {
-	register_widget( 'WP_ES_search_widget' );
+	register_widget( 'WPES_Search_Widget' );
     }
 
     /**
@@ -142,12 +153,11 @@ final class WP_ES {
         /* Action for modify query arguments */
         add_action( 'pre_get_posts' , array($this, 'wp_es_pre_get_posts'), 500);
 	
-	add_filter( 'icl_lang_sel_copy_parameters', array( $this, 'wpml_ls_copy_query_str' ) );
-	
-	if ( $this->is_WC_search() ) {
-	    add_filter( 'wpes_meta_keys', array( $this, 'wc_enable_product_hidden_fields' ) );
-	    add_filter( 'pre_get_posts', array( $this, 'set_wc_archive_page' ), 9 );
+	if ( !empty( $this->WPES_WC ) ) {
+	    $this->WPES_WC->init();
 	}
+	
+	
     }
     
     /**
@@ -408,58 +418,5 @@ final class WP_ES {
         }
         
         return FALSE;
-    }
-    
-    public function is_WPML_active( $addon = '' ) {
-	$addons = array(
-	    'ST'    =>	'WPML_ST_VERSION',
-	    'TM'    =>	'WPML_TM_VERSION',
-	    'WCML'  =>	'WCML_VERSION'
-	);
-	
-	if ( defined('ICL_SITEPRESS_VERSION') ) {
-	    if ( isset( $addons[$addon] ) ) {
-		return defined( $addons[$addon] ) ? true : false;
-	    }
-	    
-	    return true;
-	}
-	
-	return false;
-    }
-    
-    public function wpml_ls_copy_query_str( $parameters ) {
-	if ( !is_array( $parameters ) ) {
-	    return array( 'wpessid' );
-	}
-	
-	if ( !in_array( 'wpessid', $parameters ) ) {
-	    array_push( $parameters, 'wpessid' );
-	    return $parameters;
-	}
-	
-	return $parameters;
-    }
-    
-    public function is_WC_search() {
-	if ( defined( 'WC_VERSION' ) ) {
-	    return $this->WP_ES_settings['wc_search'];
-	}
-	
-	return false;
-    }
-
-    public function wc_enable_product_hidden_fields( $fields ) {
-	$fields[] = '_sku';
-	$fields[] = '_purchase_note';
-	$fields[] = '_product_attributes';
-	
-	return array_unique( $fields );
-    }
-    
-    public function set_wc_archive_page( $query ) {
-	$query->set('post_type', 'product');
-	$query->is_archive = true;
-	$query->is_post_type_archive = true;
-    }
+    }    
 }
