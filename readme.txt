@@ -4,7 +4,7 @@ Tags: search, postmeta, taxonomy, advance search, category search, page search, 
 Requires at least: 4.0
 Tested up to: 5.4.2
 Requires PHP: 7.0
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -46,6 +46,11 @@ You can include or exclude post types to appear in search results.
 1. WP Extented Search settings page
 
 == Changelog ==
+
+= 1.3.1 - 2020-07-25 =
+* Fixed issue with ACF relationship post field admin search.
+* Fixed issue with Elementor admin search.
+* Added support for new query variable [`disable_wpes`](https://github.com/5um17/wp-extended-search/issues/1#issuecomment-661307679) to disable WPES search. 
 
 = 1.3 - 2019-10-21 =
 * Fixed media search issue
