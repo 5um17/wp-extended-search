@@ -1,64 +1,87 @@
 <?php
-/*
-Plugin Name: WP Extended Search
-Plugin URI: https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html
-Author: 5um17
-Author URI: https://www.secretsofgeeks.com
-Text Domain: wp-extended-search
-Version: 2.0-dev
-Description: Extend default search to search in selected post meta, taxonomies, post types and all authors.
-*/
+/**
+ * Plugin Name: WP Extended Search
+ * Plugin URI: https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html
+ * Author: 5um17
+ * Author URI: https://www.secretsofgeeks.com
+ * Text Domain: wp-extended-search
+ * Version: 2.0
+ * Description: Extend default search to search in selected post meta, taxonomies, post types and all authors.
+ *
+ * @package WPES
+ */
 
-/* Define plugin constants */
-if (!defined('WP_ES_DIR')) {
-    //Plugin path
-    define('WP_ES_DIR', plugin_dir_path(__FILE__));
+defined( 'ABSPATH' ) || exit();
+
+// Define plugin constants.
+// Plugin root directory path.
+if ( ! defined( 'WPES_DIR' ) ) {
+	define( 'WPES_DIR', plugin_dir_path( __FILE__ ) );
 }
 
-if (!defined('WP_ES_URL')) {
-    //Plugin url
-    define('WP_ES_URL', plugin_dir_url(__FILE__));
+// Include directory path.
+if ( ! defined( 'WPES_INCLUDES_PATH' ) ) {
+	define( 'WPES_INCLUDES_PATH', WPES_DIR . 'includes/' );
 }
 
-if ( ! defined( 'WP_ES_Filename' ) ) {
-    //Plugin Filename
-    define( 'WP_ES_Filename', plugin_basename( __FILE__ ) );
+// Admin directory path.
+if ( ! defined( 'WPES_ADMIN_PATH' ) ) {
+	define( 'WPES_ADMIN_PATH', WPES_INCLUDES_PATH . 'admin/' );
 }
 
-/* Includes library files */
-require_once WP_ES_DIR . '/includes/WP_ES.php';
-require_once WP_ES_DIR . '/includes/class-wpes-search-form.php';
-require_once WP_ES_DIR . '/includes/class-wpes-search-widget.php';
-
-/* Includes admin files */
-if (is_admin()) {
-    require_once WP_ES_DIR . '/admin/WP_ES_admin.php';
-    require_once WP_ES_DIR . '/admin/class-wpes-settings-cpt.php';
+// Integration directory path.
+if ( ! defined( 'WPES_INTEGRATIONS_PATH' ) ) {
+	define( 'WPES_INTEGRATIONS_PATH', WPES_INCLUDES_PATH . 'integrations/' );
 }
 
-/* Public functions */
+// Assets directory URL.
+if ( ! defined( 'WPES_ASSETS_URL' ) ) {
+	define( 'WPES_ASSETS_URL', plugin_dir_url( __FILE__ ) . 'assets/' );
+}
+
+// Plugin main file name.
+if ( ! defined( 'WPES_FILENAME' ) ) {
+	define( 'WPES_FILENAME', plugin_basename( __FILE__ ) );
+}
+
+// Includes library files.
+require_once WPES_INCLUDES_PATH . '/class-wpes-core.php';
+require_once WPES_INCLUDES_PATH . '/class-wpes-search-form.php';
+require_once WPES_INCLUDES_PATH . '/class-wpes-search-widget.php';
+
+// Includes admin files.
+if ( is_admin() ) {
+	require_once WPES_ADMIN_PATH . '/class-wpes-admin.php';
+	require_once WPES_ADMIN_PATH . '/class-wpes-settings-cpt.php';
+}
+
+// Public functions.
 
 /**
- * WPES functions
- * @return object returns WP_ES instance
+ * WPES functions.
+ *
+ * @since 2.0
+ * @return WPES_Core returns WPES_Core instance.
  */
 function WPES() {
-    return WP_ES::instance();
+	return WPES_Core::instance();
 }
 
 /**
- * Print or return WPES search form
- * @param array $args Search form arguments
- * @param bool $print true for print false to return. Default true
- * @return string Search form HTML
+ * Print or return WPES search form.
+ *
+ * @since 2.0
+ * @param array $args Search form arguments.
+ * @param bool  $print true for print false to return. Default true.
+ * @return string Search form HTML.
  */
-function WPES_search_form( $args, $print = true ) {
-    if ( $print == true ) {
-	echo WPES()->WPES_Search_Form->get_search_form( $args );
-	return;
-    }
-    
-    return WPES()->WPES_Search_Form->get_search_form( $args );
+function wpes_search_form( $args, $print = true ) {
+	if ( true == $print ) {
+		echo WPES()->wpes_search_form->get_search_form( $args );
+		return;
+	}
+
+	return WPES()->wpes_search_form->get_search_form( $args );
 }
 
 // Start the show <3

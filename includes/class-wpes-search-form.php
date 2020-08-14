@@ -15,12 +15,15 @@ class WPES_Search_Form {
 	/**
 	 * Form default arguments.
 	 *
+	 * @since 2.0
 	 * @var array
 	 */
 	private $form_default_args = false;
 
 	/**
 	 * Class constructor
+	 *
+	 * @since 2.0
 	 */
 	public function __construct() {
 		$this->form_default_args = array(
@@ -39,6 +42,7 @@ class WPES_Search_Form {
 	/**
 	 * Magic method to access the class properties.
 	 *
+	 * @since 2.0
 	 * @param string $name Name of the property.
 	 * @return mixed property or false
 	 */
@@ -53,6 +57,7 @@ class WPES_Search_Form {
 	/**
 	 * Get form default argument keys with description.
 	 *
+	 * @since 2.0
 	 * @param string $key_name argument key name to get default value.
 	 * @return mixed Array of arguments or single argument default value.
 	 */
@@ -77,6 +82,7 @@ class WPES_Search_Form {
 	/**
 	 * Register WP shortcode
 	 *
+	 * @since 2.0
 	 * @param array $atts Array of shortcode attributes.
 	 * @return mixed Output of shortcode.
 	 */
@@ -88,6 +94,7 @@ class WPES_Search_Form {
 	/**
 	 * Get the search form.
 	 *
+	 * @since 2.0
 	 * @param array $args Array of arguments.
 	 * @return mixed Search form HTML.
 	 */
@@ -151,6 +158,7 @@ class WPES_Search_Form {
 	/**
 	 * Get HTML hidden field for setting ID.
 	 *
+	 * @since 2.0
 	 * @param int $wpessid WPES setting ID.
 	 * @return string HTML hidden field.
 	 */
@@ -165,6 +173,7 @@ class WPES_Search_Form {
 	/**
 	 * Get form ID HTML attribute.
 	 *
+	 * @since 2.0
 	 * @param int $wpessid WPES setting ID.
 	 * @return string ID attribute.
 	 */

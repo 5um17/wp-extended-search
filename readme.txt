@@ -2,7 +2,7 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search results, posts per page, exact search
 Requires at least: 4.0
-Tested up to: 5.4.2
+Tested up to: 5.5
 Requires PHP: 7.0
 Stable tag: 1.3.1
 License: GPLv3

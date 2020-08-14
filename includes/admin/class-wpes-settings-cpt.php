@@ -15,6 +15,8 @@ class WPES_Settings_CPT {
 
 	/**
 	 * Register actions.
+	 *
+	 * @since 2.0
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_setting_posttype' ) );
@@ -26,6 +28,8 @@ class WPES_Settings_CPT {
 
 	/**
 	 * Register post type
+	 *
+	 * @since 2.0
 	 */
 	public function register_setting_posttype() {
 		// CPT labels.
@@ -67,7 +71,8 @@ class WPES_Settings_CPT {
 	/**
 	 * Remove some buttons from CPT meta box.
 	 *
-	 * @return type
+	 * @since 2.0
+	 * @return NULL
 	 */
 	public function post_submit_box_js() {
 		if ( get_current_screen()->id !== 'wpes_setting' ) {
@@ -90,6 +95,7 @@ class WPES_Settings_CPT {
 	/**
 	 * Remove quick edit controls.
 	 *
+	 * @since 2.0
 	 * @param array  $actions quick edit actions.
 	 * @param string $post WP_Post object.
 	 * @return array $actions quick edit actions.
@@ -105,6 +111,7 @@ class WPES_Settings_CPT {
 	/**
 	 * Remove bulk edit.
 	 *
+	 * @since 2.0
 	 * @param array $actions Bulk edit actions.
 	 * @return array $actions Bulk edit actions.
 	 */
@@ -116,6 +123,7 @@ class WPES_Settings_CPT {
 	/**
 	 * Delete WPES setting when post is deleted from trash.
 	 *
+	 * @since 2.0
 	 * @param int $post_id Post ID.
 	 */
 	public function delete_wpes_setting( $post_id ) {
@@ -126,6 +134,8 @@ class WPES_Settings_CPT {
 
 	/**
 	 * Register settings meta boxes.
+	 *
+	 * @since 2.0
 	 */
 	public function register_meta_boxes() {
 		add_meta_box( 'wpes-cpt-configure-setting', 'WP Extended Search', array( $this, 'primary_meta_box' ), 'wpes_setting', 'side' );
@@ -139,6 +149,7 @@ class WPES_Settings_CPT {
 	/**
 	 * Check if setting is published or not.
 	 *
+	 * @since 2.0
 	 * @param object $post WP_Post object.
 	 * @return boolean true when published else false.
 	 */
@@ -153,6 +164,7 @@ class WPES_Settings_CPT {
 	/**
 	 * Primary metabox to display the setting button.
 	 *
+	 * @since 2.0
 	 * @param object $post WP_Post object.
 	 */
 	public function primary_meta_box( $post ) {
@@ -168,6 +180,7 @@ class WPES_Settings_CPT {
 	/**
 	 * Metabox to display the setting post info.
 	 *
+	 * @since 2.0
 	 * @param object $post WP_Post object.
 	 */
 	public function setting_info( $post ) {
@@ -195,8 +208,8 @@ class WPES_Settings_CPT {
 			<th><?php _e( 'PHP', 'wp-extended-search' ); ?></th>
 			<td>
 				<textarea title="<?php _e( 'Click to copy.', 'wp-extended-search' ); ?>" rows="5" class="wpes-display-input" readonly="readonly">
-if ( function_exists( 'WPES_search_form' ) ) {
-	WPES_search_form( array( 
+if ( function_exists( 'wpes_search_form' ) ) {
+	wpes_search_form( array( 
 		'wpessid' => <?php echo $post->ID; ?> 
 	) );
 }				</textarea>
@@ -215,12 +228,12 @@ if ( function_exists( 'WPES_search_form' ) ) {
 		<hr />
 		<dl class="wpes-params">
 			<?php
-			foreach ( WPES()->WPES_Search_Form->get_form_default_args() as $key => $key_desc ) {
+			foreach ( WPES()->wpes_search_form->get_form_default_args() as $key => $key_desc ) {
 				?>
 				<dt><?php echo $key; ?></dt>
 				<dd>
 					<p class="wpes-param-desc"><?php echo $key_desc; ?></p>
-					<p class="wpes-param-default"><em><?php echo __( 'Default value:', 'wp-extended-search' ) . ' ' . WPES()->WPES_Search_Form->get_form_default_args( $key ); ?></em></p>
+					<p class="wpes-param-default"><em><?php echo __( 'Default value:', 'wp-extended-search' ) . ' ' . WPES()->wpes_search_form->get_form_default_args( $key ); ?></em></p>
 				</dd>
 				<?php
 			}

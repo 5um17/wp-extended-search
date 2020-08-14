@@ -12,8 +12,11 @@ defined( 'ABSPATH' ) || exit();
  * WooCommerce compatibility class
  */
 class WPES_WC {
+
 	/**
 	 * Class constructor
+	 *
+	 * @since 2.0
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -21,6 +24,8 @@ class WPES_WC {
 
 	/**
 	 * Init method, hooked on init action in main class.
+	 *
+	 * @since 2.0
 	 */
 	public function init() {
 		add_filter( 'pre_get_posts', array( $this, 'set_wc_archive_page' ), 9 );
@@ -28,6 +33,8 @@ class WPES_WC {
 
 	/**
 	 * Register actions.
+	 *
+	 * @since 2.0
 	 */
 	public function admin_init() {
 		add_filter( 'wpes_meta_keys_query', array( $this, 'product_meta_keys_query' ) );
@@ -39,6 +46,7 @@ class WPES_WC {
 	/**
 	 * Alert the meta query to display only product meta keys.
 	 *
+	 * @since 2.0
 	 * @global object $wpdb wpdb instance
 	 * @return NULL
 	 */
@@ -50,6 +58,7 @@ class WPES_WC {
 	/**
 	 * Append the products hidden meta keys.
 	 *
+	 * @since 2.0
 	 * @param array $fields Array of meta keys.
 	 * @return array $fields Array of meta keys
 	 */
@@ -65,6 +74,7 @@ class WPES_WC {
 	/**
 	 * Display only product taxonomies in WPES settings.
 	 *
+	 * @since 2.0
 	 * @param array $tax_args Array of arguments for get_taxonomies().
 	 * @return array $tax_args
 	 */
@@ -76,6 +86,7 @@ class WPES_WC {
 	/**
 	 * Display only product CPT in WPES settings.
 	 *
+	 * @since 2.0
 	 * @param array $args Array of arguments for get_post_types().
 	 * @return string
 	 */
@@ -87,6 +98,7 @@ class WPES_WC {
 	/**
 	 * Set is_archive and is_post_type_archive to true to display the WC template.
 	 *
+	 * @since 2.0
 	 * @param object $query WP_Query object.
 	 */
 	public function set_wc_archive_page( $query ) {

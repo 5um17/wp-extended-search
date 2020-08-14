@@ -15,6 +15,7 @@ class WPES_Search_Widget extends WP_Widget {
 	/**
 	 * String names to translate.
 	 *
+	 * @since 2.0
 	 * @var array
 	 */
 	private $_translatable_keys = array(
@@ -25,6 +26,8 @@ class WPES_Search_Widget extends WP_Widget {
 
 	/**
 	 * Widget constructor.
+	 *
+	 * @since 2.0
 	 */
 	public function __construct() {
 		$options = array(
@@ -38,6 +41,7 @@ class WPES_Search_Widget extends WP_Widget {
 	/**
 	 * Translate widget strings using WPML.
 	 *
+	 * @since 2.0
 	 * @param object  $instance Widget instance.
 	 * @param boolean $register Weather to register or translate.
 	 * @return NULL
@@ -58,6 +62,7 @@ class WPES_Search_Widget extends WP_Widget {
 	/**
 	 * Display widget method.
 	 *
+	 * @since 2.0
 	 * @param array  $args Array of widget arguments.
 	 * @param object $instance Widget instance.
 	 * @return NULL
@@ -82,7 +87,7 @@ class WPES_Search_Widget extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
-		WPES_search_form( $instance );
+		wpes_search_form( $instance );
 
 		echo $args['after_widget'];
 
@@ -91,6 +96,7 @@ class WPES_Search_Widget extends WP_Widget {
 	/**
 	 * Widget update method
 	 *
+	 * @since 2.0
 	 * @param object $new_instance New widget instance.
 	 * @param object $old_instance Old widget instance.
 	 * @return object updated widget instance.
@@ -99,7 +105,7 @@ class WPES_Search_Widget extends WP_Widget {
 		$instance          = $old_instance;
 		$instance['title'] = sanitize_text_field( $new_instance['title'] );
 
-		foreach ( WPES()->WPES_Search_Form->get_form_default_args() as $key => $key_desc ) {
+		foreach ( WPES()->wpes_search_form->get_form_default_args() as $key => $key_desc ) {
 			if ( 'wpessid' === $key && get_post_type( intval( $new_instance[ $key ] ) ) === 'wpes_setting' ) {
 				$instance[ $key ] = intval( $new_instance[ $key ] );
 			}
@@ -115,11 +121,12 @@ class WPES_Search_Widget extends WP_Widget {
 	/**
 	 * Widget form
 	 *
+	 * @since 2.0
 	 * @param object $instance Current widget instance.
 	 */
 	public function form( $instance ) {
-		$instance     = wp_parse_args( (array) $instance, array_merge( WPES()->WPES_Search_Form->form_default_args, array( 'title' => '' ) ) );
-		$all_settings = WPES()->WP_ES_admin->get_all_setting_names(); ?>
+		$instance     = wp_parse_args( (array) $instance, array_merge( WPES()->wpes_search_form->form_default_args, array( 'title' => '' ) ) );
+		$all_settings = WPES()->wpes_admin->get_all_setting_names(); ?>
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
@@ -127,7 +134,7 @@ class WPES_Search_Widget extends WP_Widget {
 		</p>
 		<?php
 
-		foreach ( WPES()->WPES_Search_Form->get_form_default_args() as $key => $key_desc ) {
+		foreach ( WPES()->wpes_search_form->get_form_default_args() as $key => $key_desc ) {
 			if ( 'wpessid' === $key ) {
 				continue;
 			}

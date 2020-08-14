@@ -16,6 +16,8 @@ class WPES_WPML {
 	/**
 	 * Class constructor.
 	 * Register WPML actions.
+	 *
+	 * @since 2.0
 	 */
 	public function __construct() {
 		add_filter( 'icl_lang_sel_copy_parameters', array( $this, 'ls_copy_query_str' ) );
@@ -25,6 +27,7 @@ class WPES_WPML {
 	/**
 	 * Check if given WPML is active.
 	 *
+	 * @since 2.0
 	 * @param string $addon Addon name: ST, TM, WCML.
 	 * @return boolean true if active else false.
 	 */
@@ -46,6 +49,7 @@ class WPES_WPML {
 	/**
 	 * Translate or register string using WPML API.
 	 *
+	 * @since 2.0
 	 * @param string  $context Context name.
 	 * @param string  $str_value Original string.
 	 * @param string  $str_name String Name.
@@ -65,6 +69,7 @@ class WPES_WPML {
 	/**
 	 * Copy wpessid parameter to translated URLs in language switcher.
 	 *
+	 * @since 2.0
 	 * @param array $parameters Original parameters to copy.
 	 * @return array $parameters Updated parameters.
 	 */
@@ -84,6 +89,8 @@ class WPES_WPML {
 	/**
 	 * Remove WPML metabox.
 	 * We don't need to translate the setting CPT so remove it.
+	 *
+	 * @since 2.0
 	 */
 	public function remove_wpml_meta_box() {
 		remove_meta_box( 'icl_div_config', 'wpes_setting', 'normal' );
