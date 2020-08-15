@@ -1,9 +1,12 @@
 /* 
-    Author     : 5um17
     Setting CPT JS
+    Author     : 5um17
 */
 
+// jQuery ready function.
 jQuery(document).ready(function (){
+    
+    // Select and copy the code to clipboard.
     jQuery('.wpes-display-input').click(function (){
         jQuery(this).select();
         document.execCommand('copy');
@@ -12,4 +15,5 @@ jQuery(document).ready(function (){
             jQuery(this).remove();
         });
     });
+    
 });

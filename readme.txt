@@ -1,6 +1,6 @@
 === WP Extended Search ===
 Contributors: 5um17
-Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search results, posts per page, exact search
+Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
 Requires at least: 4.0
 Tested up to: 5.5
 Requires PHP: 7.0
@@ -8,22 +8,28 @@ Stable tag: 1.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Extend default search to search in selected post meta, taxonomies, post types and all authors.
+Extend search functionality to search in selected post meta, taxonomies, post types, and all authors.
 
 == Description ==
-Control WordPress default search to search in Post Meta, Categories, Tags or Custom Taxonomies via admin settings. Admin can select meta keys to search in, also can control the default behavior of search in post title or post content. 
- 
-You can include or exclude post types to appear in search results.
+WP Extended Search is a lightweight and powerful search plugin.
+
+With this plugin you can customize WordPress search to search in Post Meta, Author names, Categories, Tags, or Custom Taxonomies via admin settings. You can control the default behavior of WordPress to search in the post title, post content, and post excerpt.
+
+Apart from customizing default search behavior, you can create multiple search settings, and then you can assign these settings to custom search forms.
+For custom search forms, you have the option to choose from a widget, shortcode, PHP function, or HTML.
 
 = Features =
 
 * Search in selected meta keys
-* Search in selected in-built or custom taxonomies
-* Search in post author name
+* Search in category, tags or custom taxonomies
+* Search in the post author name
 * Include or exclude any public post type
 * Control whether to search in title or content or excerpt or all
+* Compatible with WooCommerce. Search in product SKU, Attributes, and custom fields, etc.
+* Create unlimited search settings to use with custom search forms.
+* Add search forms using a widget, shortcode or PHP function. Also works with custom searchform.php
 * Exclude old content from search results (Older than admin specified date)
-* Customize the number of posts to display on search results page
+* Customize the number of posts to display on the search results page
 * Customize SQL relation (AND/OR) between search terms
 * Customize order of search results
 * Control whether to match search query exactly or partially
@@ -32,7 +38,7 @@ You can include or exclude post types to appear in search results.
 
 = Links =
 
-* [Complete documentation](https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html)
+* [Complete documentation](https://wpes.secretsofgeeks.com/)
 * [GitHub repository](https://github.com/5um17/wp-extended-search)
 
 == Installation ==
@@ -45,7 +51,20 @@ You can include or exclude post types to appear in search results.
 == Screenshots ==
 1. WP Extented Search settings page
 
+== Upgrade Notice ==
+
+= 2.0 =
+2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
+
 == Changelog ==
+
+= 2.0 - 0000-00-00 =
+**Upgrade Notice**
+*2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.*
+
+* Added new feature to add multiple search settings.
+* Added WooCommerce product search support.
+* Complete code refactoring.
 
 = 1.3.1 - 2020-07-25 =
 * Fixed issue with ACF relationship post field admin search.
