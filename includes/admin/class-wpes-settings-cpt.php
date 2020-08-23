@@ -184,8 +184,21 @@ class WPES_Settings_CPT {
 	 * @param object $post WP_Post object.
 	 */
 	public function setting_info( $post ) {
+		$using_template = locate_template( 'wpes-searchform-' . $post->ID . '.php' );
+		if ( ! empty( $using_template ) ) {
+			?>
+			<div class="wp-es-notice">
+				<p>
+					<?php
+					/* translators: %s: Template file path. */
+					printf( __( 'Since you are using a search form template for this setting, you have to make changes to the template directly to modify placeholders, labels, and CSS classes.<br />Template File: <code>%s</code>', 'wp-extended-search' ), str_replace( ABSPATH, '', $using_template ) );
+					?>
+				</p>
+			</div>
+			<?php
+		}
 		?>
-		<h2><?php _e( 'You can display the search form for this setting in following ways:-', 'wp-extended-search' ); ?></h2>
+		<h2><?php _e( 'You can display the search form for this setting in following ways:', 'wp-extended-search' ); ?></h2>
 		<hr />
 		<table class="form-table">
 			<tr>
@@ -224,7 +237,7 @@ if ( function_exists( 'wpes_search_form' ) ) {
 			</td>
 			</tr>
 		</table>
-		<h2><?php _e( 'Parameters:-', 'wp-extended-search' ); ?></h2>
+		<h2><?php _e( 'Parameters:', 'wp-extended-search' ); ?></h2>
 		<hr />
 		<dl class="wpes-params">
 			<?php
@@ -239,6 +252,42 @@ if ( function_exists( 'wpes_search_form' ) ) {
 			}
 			?>
 		</dl>
+		<h2><?php _e( 'Custom Search Templates:', 'wp-extended-search' ); ?></h2>
+		<hr />
+		<div class="wpes-custom-templates-help">
+			<p class="description"><?php _e( 'You can use custom search templates to customize the search form appearance completely.', 'wp-extended-search' ); ?></p>
+			<ol>
+				<li>
+					<p class="description">
+						<?php
+						/* translators: %1$s: Template name, %2$s: Setting ID. */
+						printf( __( 'Create <code>%1$s</code> in your child theme, where %2$d is the setting ID.', 'wp-extended-search' ), "wpes-searchform-{$post->ID}.php", $post->ID );
+						?>
+					</p>
+				</li>
+				<li>
+					<p class="description">
+						<?php
+						/* translators: %1$s: WP search form template name, %2$s: Plugin search template name. */
+						printf( __( 'Add custom search form code to it. If you are not sure how to write custom form code then copy the content from the theme\'s <code>%1$s</code> and add to <code>%2$s</code> with your modifications.', 'wp-extended-search' ), 'searchform.php', "wpes-searchform-{$post->ID}.php" );
+						?>
+					</p>
+				</li>
+				<li><p class="description"><?php _e( 'Then use the WPES Search Widget, Shortcode, or PHP function to display the search form.', 'wp-extended-search' ); ?></p></li>
+			</ol>
+			<strong><?php _e( 'Notes:', 'wp-extended-search' ); ?></strong>
+			<ul class="ul-disc">
+				<li><p class="description"><?php _e( 'You can create many templates each per setting.', 'wp-extended-search' ); ?></p></li>
+				<li>
+					<p class="description">
+						<?php
+						/* translators: %s: search form hidden field name. */
+						printf( __( 'Do not add <code>%s</code> hidden field to the custom template, it will be added by the plugin.', 'wp-extended-search' ), 'wpessid' );
+						?>
+					</p>
+				</li>
+			</ul>
+		</div>
 		<?php
 	}
 }

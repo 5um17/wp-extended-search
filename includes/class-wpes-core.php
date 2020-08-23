@@ -393,8 +393,8 @@ final class WPES_Core {
 					$meta_key_or = '';
 
 					foreach ( $this->wpes_settings['meta_keys'] as $key_slug ) {
-						$search     .= $or;
-						$search     .= $wpdb->prepare( '%s (espm.meta_key = %s AND espm.meta_value LIKE %s)', $meta_key_or, $key_slug, $term );
+						$search     .= $or . $meta_key_or;
+						$search     .= $wpdb->prepare( '(espm.meta_key = %s AND espm.meta_value LIKE %s)', $key_slug, $term );
 						$or          = '';
 						$meta_key_or = ' OR ';
 					}
@@ -407,8 +407,8 @@ final class WPES_Core {
 					$tax_or = '';
 
 					foreach ( $this->wpes_settings['taxonomies'] as $tax ) {
-						$search .= $or;
-						$search .= $wpdb->prepare( '%s (estt.taxonomy = %s AND est.name LIKE %s)', $tax_or, $tax, $term );
+						$search .= $or . $tax_or;
+						$search .= $wpdb->prepare( '(estt.taxonomy = %s AND est.name LIKE %s)', $tax, $term );
 						$or      = '';
 						$tax_or  = ' OR ';
 					}
@@ -425,7 +425,8 @@ final class WPES_Core {
 				$search .= ')';
 			} else {
 				// If plugin settings not available return the default query.
-				$search .= $wpdb->prepare( "%s (($wpdb->posts.post_title LIKE %s) OR ($wpdb->posts.post_content LIKE %s) OR ($wpdb->posts.post_excerpt LIKE %s))", $searchand, $term, $term, $term );
+				$search .= $searchand;
+				$search .= $wpdb->prepare( "(($wpdb->posts.post_title LIKE %s) OR ($wpdb->posts.post_content LIKE %s) OR ($wpdb->posts.post_excerpt LIKE %s))", $term, $term, $term );
 			}
 
 			$searchand = " $terms_relation_type ";

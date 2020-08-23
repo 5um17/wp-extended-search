@@ -114,11 +114,17 @@ class WPES_Search_Form {
 		 */
 		do_action( 'pre_get_search_form' );
 
-		$search_form_template = locate_template( 'searchform.php' );
+		// Load search form template if exist for specific setting. e.g. wpes-searchform-1 where 1 is setting ID.
+		$template_file        = empty( $args['wpessid'] ) ? 'wpes-searchform.php' : 'wpes-searchform-' . $args['wpessid'] . '.php';
+		$search_form_template = locate_template( $template_file );
 		if ( '' != $search_form_template ) {
 			ob_start();
 			require( $search_form_template );
 			$form = ob_get_clean();
+
+			// Add wpessid hidden field to search form.
+			$count = 1;
+			$form  = str_replace( '</form>', $this->get_wpessid_hidden_field( $args['wpessid'] ) . '</form>', $form, $count );
 		} else {
 			// Build a string containing an aria-label to use for the search form.
 			if ( isset( $args['aria_label'] ) && $args['aria_label'] ) {
@@ -148,7 +154,8 @@ class WPES_Search_Form {
 		 */
 		$result = apply_filters( 'get_search_form', $form );
 
-		if ( null === $result ) {
+		// Return the original form before filter if form is null or does not contain the wpessid field.
+		if ( null === $result || ( ! empty( $this->get_wpessid_hidden_field( $args['wpessid'] ) ) && false === strpos( $result, $this->get_wpessid_hidden_field( $args['wpessid'] ) ) ) ) {
 			$result = $form;
 		}
 
