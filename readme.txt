@@ -2,9 +2,9 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
 Requires at least: 4.0
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 7.0
-Stable tag: 1.3.1
+Stable tag: 2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,8 +48,34 @@ For custom search forms, you have the option to choose from a widget, shortcode,
   Download WP Extended Search and upload it to your webserver via your FTP application. The WordPress codex contains [instructions on how to do this here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 * Activate the plugin and navigate to (Settings > Extended Search) to choose your desired search settings.
 
+== Frequently Asked Questions ==
+
+= Is it compatible with WooCommerce? =
+
+Yes, It is. When WooCommerce is active you will see a new checkbox in setting "Optimize for Products Search" select it and then the search results will use the default WooCommerce template or the template from your theme.
+
+= How can I add a search form? =
+
+You can use the Widget, Shortcode, and PHP function to display the search form. Also, you can add a hidden HTML field to your existing searchform.php template.
+
+= Can I use my default search form widget? =
+
+Yes, you can. You can modify the global setting to alter the results from the default search form. An extra search form is needed only when you would like to have more than one search criteria on the site.
+
+= Can I use this plugin just to add a specific search form to my site and leave the WordPress default search as it is? =
+
+Yes, you can. Go to the Search Settings and select Global in setting name, there you will see a button to disable the global search.
+As global search is disabled now you can add a new search form with specific search criteria.
+
+= How can I customize the search form? =
+
+You can add custom CSS to the theme to style the search form. Or you can set CSS classes in the widget, shortcode, and PHP function.
+Also, you can add a complete custom template for each search setting in the theme.
+
 == Screenshots ==
 1. WP Extented Search settings page
+2. Add/Delete Settings
+3. Edit setting name
 
 == Upgrade Notice ==
 
@@ -58,7 +84,7 @@ For custom search forms, you have the option to choose from a widget, shortcode,
 
 == Changelog ==
 
-= 2.0 - 0000-00-00 =
+= 2.0 - 2020-12-11 =
 **Upgrade Notice**
 *2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.*
 

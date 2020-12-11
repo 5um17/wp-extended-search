@@ -121,7 +121,10 @@ class WPES_Admin {
 		add_settings_field( 'wp_es_include_authors', __( 'Author Setting', 'wp-extended-search' ), array( $this, 'wp_es_author_settings' ), 'wp-es', 'wp_es_section_1' );
 		add_settings_field( 'wp_es_list_post_types', __( 'Select Post Types', 'wp-extended-search' ), array( $this, 'wp_es_post_types_settings' ), 'wp-es', 'wp_es_section_1' );
 		add_settings_field( 'wp_es_terms_relation_type', __( 'Terms Relation Type', 'wp-extended-search' ), array( $this, 'wp_es_terms_relation_type' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_terms_relation' ) );
-		add_settings_field( 'wp_es_exact_search', __( 'Match the search term exactly', 'wp-extended-search' ), array( $this, 'wp_es_exact_search' ), 'wp-es', 'wp_es_section_misc' );
+		if ( ! WPES()->wpes_settings['wc_search'] ) {
+			// Exact matching is not available for WC till this bug this fixed https://core.trac.wordpress.org/ticket/50871.
+			add_settings_field( 'wp_es_exact_search', __( 'Match the search term exactly', 'wp-extended-search' ), array( $this, 'wp_es_exact_search' ), 'wp-es', 'wp_es_section_misc' );
+		}
 		add_settings_field( 'wp_es_exclude_older_results', __( 'Select date to exclude older results', 'wp-extended-search' ), array( $this, 'wp_es_exclude_results' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_exclude_date' ) );
 		add_settings_field( 'wp_es_number_of_posts', __( 'Posts per page', 'wp-extended-search' ), array( $this, 'wp_es_posts_per_page' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_posts_per_page' ) );
 		add_settings_field( 'wp_es_search_results_order', __( 'Search Results Order', 'wp-extended-search' ), array( $this, 'wp_es_search_results_order' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_search_results_order' ) );

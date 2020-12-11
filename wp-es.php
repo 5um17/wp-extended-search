@@ -5,7 +5,7 @@
  * Author: 5um17
  * Author URI: https://www.secretsofgeeks.com
  * Text Domain: wp-extended-search
- * Version: 2.0-b.2
+ * Version: 2.0
  * Description: Extend search functionality to search in selected post meta, taxonomies, post types, and all authors.
  *
  * @package WPES
