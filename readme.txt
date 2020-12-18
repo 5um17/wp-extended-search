@@ -4,7 +4,7 @@ Tags: search, postmeta, taxonomy, advance search, category search, page search, 
 Requires at least: 4.0
 Tested up to: 5.6
 Requires PHP: 7.0
-Stable tag: 2.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,9 @@ Also, you can add a complete custom template for each search setting in the them
 2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
 
 == Changelog ==
+
+= 2.0.1 - 2020-12-18 =
+* Fixed errors in dashboard for non-admin users.
 
 = 2.0 - 2020-12-11 =
 **Upgrade Notice**
