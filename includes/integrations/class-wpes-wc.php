@@ -102,8 +102,10 @@ class WPES_WC {
 	 * @param object $query WP_Query object.
 	 */
 	public function set_wc_archive_page( $query ) {
-		$query->set( 'post_type', 'product' );
-		$query->is_archive           = true;
-		$query->is_post_type_archive = true;
+		if ( WPES()->is_search( $query ) ) {
+			$query->set( 'post_type', 'product' );
+			$query->is_archive           = true;
+			$query->is_post_type_archive = true;
+		}
 	}
 }

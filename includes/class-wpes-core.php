@@ -270,7 +270,7 @@ final class WPES_Core {
 	 * @param object $query wp_query object.
 	 */
 	public function wp_es_pre_get_posts( $query ) {
-		if ( ! empty( $query->is_search ) && ! empty( $query->get( 's' ) ) && empty( $query->get( 'disable_wpes' ) ) && ! $this->is_bbPress_search() ) {
+		if ( $this->is_search( $query ) ) {
 
 			// Set post types.
 			if ( ! empty( $this->wpes_settings['post_types'] ) ) {
@@ -338,8 +338,8 @@ final class WPES_Core {
 	public function wp_es_custom_query( $search, $wp_query ) {
 		global $wpdb;
 
-		if ( empty( $search ) || ! empty( $wp_query->query_vars['suppress_filters'] ) || ! empty( $wp_query->get( 'disable_wpes' ) ) ) {
-			return $search; // skip processing - If no search term in query or suppress_filters is true or disable_wpes is true.
+		if ( ! $this->is_search( $wp_query ) ) {
+			return $search; // Do not proceed if does not match our search conditions.
 		}
 
 		$q         = $wp_query->query_vars;
@@ -532,6 +532,27 @@ final class WPES_Core {
 	public function is_bbpress_search() {
 		if ( function_exists( 'is_bbpress' ) ) {
 			return is_bbpress();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the query for the search and should be altered by WPES.
+	 *
+	 * @since dev
+	 * @param WP_Query $query WP_Query object.
+	 * @return boolean true if query satisfied search conditions else false.
+	 */
+	public function is_search( $query ) {
+
+		if ( ! empty( $query->is_search ) && ! empty( $query->get( 's' ) ) && empty( $query->get( 'suppress_filters' ) ) && empty( $query->get( 'disable_wpes' ) ) && ! $this->is_bbPress_search() ) {
+
+			if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+				return isset( $_REQUEST['wpessid'] ); // Only alter REST query results when wpessid is set.
+			}
+
+			return true;
 		}
 
 		return false;
