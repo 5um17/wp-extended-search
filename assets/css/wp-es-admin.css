@@ -3,8 +3,7 @@
     Author     : 5um17
 */
 
-.wpes-meta-keys-wrapper{columns:auto 3;-moz-columns:auto 3;-webkit-columns:auto 3}
-.form-table .wpes-meta-keys-wrapper p{margin:0}
+select.wpes-select2 {width: 100%; max-width: none;}
 .wpes-params dt{font-family:Consolas,Monaco,monospace;font-weight:700}
 .wpes-params p{margin:0}
 .wpes-params dd{margin-bottom:12px}
@@ -15,3 +14,5 @@
 #wpes-cpt-configure-setting .button{width:100%;text-align:center}
 .wpes-custom-templates-help .description {font-size: 1.08em;}
 .wp-es-notice {padding: 0 10px;font-size: 1.08em; border: 1px solid #ccc; border-left: 5px solid #cccc2e;box-shadow: 0 1px 1px rgba(0,0,0,.04);}
+.select2-container--default .select2-selection--multiple .select2-selection__choice {line-height: 1.6;margin-bottom: 0;}
+.select2-results__option {margin-bottom: 0;line-height: 1.6;}

@@ -36,5 +36,15 @@ jQuery(document).ready(function (){
         dateFormat: "MM dd, yy" 
     });
     
+    // Bind Select2.
+    jQuery('.wpes-select2').select2({
+        placeholder: wpes_admin_vars.select2_str_placeholder,
+        language: {
+            noResults: function () {
+                return wpes_admin_vars.select2_str_noResults;
+            }
+        }
+    });
+    
 });
 

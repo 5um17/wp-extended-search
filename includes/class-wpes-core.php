@@ -540,7 +540,7 @@ final class WPES_Core {
 	/**
 	 * Check if the query for the search and should be altered by WPES.
 	 *
-	 * @since dev
+	 * @since 2.0.2
 	 * @param WP_Query $query WP_Query object.
 	 * @return boolean true if query satisfied search conditions else false.
 	 */

@@ -142,18 +142,22 @@ class WPES_Admin {
 		// Register scripts for main setting page.
 		if ( 'toplevel_page_wp-es' === $hook ) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
-			wp_enqueue_script( 'wpes_admin_js', WPES_ASSETS_URL . 'js/wp-es-admin.js' );
+			wp_enqueue_script( 'wpes_select2_js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js' );
+			wp_enqueue_script( 'wpes_admin_js', WPES_ASSETS_URL . 'js/wp-es-admin.js', array( 'jquery-ui-datepicker', 'wpes_select2_js' ) );
 			wp_enqueue_style( 'wpes_jquery_ui', WPES_ASSETS_URL . 'css/jQueryUI/jquery-ui.min.css' );
 			wp_enqueue_style( 'wpes_jquery_ui_theme', WPES_ASSETS_URL . 'css/jQueryUI/jquery-ui.theme.min.css' );
-			wp_enqueue_style( 'wpes_admin_css', WPES_ASSETS_URL . 'css/wp-es-admin.css' );
+			wp_enqueue_style( 'wpes_select2_css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' );
+			wp_enqueue_style( 'wpes_admin_css', WPES_ASSETS_URL . 'css/wp-es-admin.css', array( 'wpes_jquery_ui', 'wpes_jquery_ui_theme', 'wpes_select2_css' ) );
 
 			wp_localize_script(
 				'wpes_admin_js',
 				'wpes_admin_vars',
 				array(
-					'admin_setting_page'   => admin_url( 'admin.php?page=wp-es' ),
-					'new_setting_url'      => admin_url( 'post-new.php?post_type=wpes_setting' ),
-					'wc_setting_alert_txt' => __( 'The setting will be saved before you can make further changes.', 'wp-extended-search' ),
+					'admin_setting_page'      => admin_url( 'admin.php?page=wp-es' ),
+					'new_setting_url'         => admin_url( 'post-new.php?post_type=wpes_setting' ),
+					'wc_setting_alert_txt'    => __( 'The setting will be saved before you can make further changes.', 'wp-extended-search' ),
+					'select2_str_noResults'   => __( 'No results found.', 'wp-extended-search' ),
+					'select2_str_placeholder' => __( 'Select', 'wp-extended-search' ),
 				)
 			);
 
@@ -354,18 +358,15 @@ class WPES_Admin {
 		$meta_keys = $this->wp_es_fields();
 		if ( ! empty( $meta_keys ) ) {
 			?>
-			<div class="wpes-meta-keys-wrapper">
-				<?php
-				foreach ( (array) $meta_keys as $meta_key ) {
-					?>
-					<p>
-						<input <?php echo $this->wp_es_checked( $meta_key, WPES()->wpes_settings['meta_keys'] ); ?> type="checkbox" id="<?php echo $meta_key; ?>" name="<?php echo WPES()->option_key_name; ?>[meta_keys][]" value="<?php echo $meta_key; ?>" />
-						<label for="<?php echo $meta_key; ?>"><?php echo $meta_key; ?></label>&nbsp;&nbsp;&nbsp;
-					</p>
-					<?php
-				}
+			<select class="wpes-select2" multiple="multiple" name="<?php echo WPES()->option_key_name; ?>[meta_keys][]">
+			<?php
+			foreach ( (array) $meta_keys as $meta_key ) {
 				?>
-			</div>
+				<option <?php echo $this->wp_es_checked( $meta_key, WPES()->wpes_settings['meta_keys'], true ); ?> value="<?php echo $meta_key; ?>"><?php echo $meta_key; ?></option>
+				<?php
+			}
+			?>
+			</select>
 			<?php
 		} else {
 			?>
@@ -403,12 +404,19 @@ class WPES_Admin {
 		 */
 		$all_taxonomies = apply_filters( 'wpes_tax', get_taxonomies( $tax_args, 'objects' ) );
 		if ( is_array( $all_taxonomies ) && ! empty( $all_taxonomies ) ) {
+			?>
+			<select multiple="multiple" class="wpes-select2" name="<?php echo WPES()->option_key_name; ?>[taxonomies][]">
+			<?php
 			foreach ( $all_taxonomies as $tax_name => $tax_obj ) {
 				?>
-				<input <?php echo $this->wp_es_checked( $tax_name, WPES()->wpes_settings['taxonomies'] ); ?> type="checkbox" value="<?php echo $tax_name; ?>" id="<?php echo 'wp_es_' . $tax_name; ?>" name="<?php echo WPES()->option_key_name; ?>[taxonomies][]" />&nbsp;
-				<label for="<?php echo 'wp_es_' . $tax_name; ?>"><?php echo ! empty( $tax_obj->labels->name ) ? $tax_obj->labels->name : $tax_name; ?></label><br />
+				<option <?php echo $this->wp_es_checked( $tax_name, WPES()->wpes_settings['taxonomies'], true ); ?> value="<?php echo $tax_name; ?>">
+				<?php echo ! empty( $tax_obj->labels->name ) ? $tax_obj->labels->name : $tax_name; ?>
+				</option>
 				<?php
 			}
+			?>
+			</select>
+			<?php
 		} else {
 			?>
 			<em><?php _e( 'No public taxonomy found!', 'wp-extended-search' ); ?></em>
@@ -460,12 +468,19 @@ class WPES_Admin {
 		$all_post_types = apply_filters( 'wpes_post_types', get_post_types( $post_types_args, 'objects' ) );
 
 		if ( is_array( $all_post_types ) && ! empty( $all_post_types ) ) {
+			?>
+			<select multiple="multiple" class="wpes-select2" name="<?php echo WPES()->option_key_name; ?>[post_types][]">
+			<?php
 			foreach ( $all_post_types as $post_name => $post_obj ) {
 				?>
-				<input <?php echo $this->wp_es_checked( $post_name, WPES()->wpes_settings['post_types'] ); ?> type="checkbox" value="<?php echo $post_name; ?>" id="<?php echo 'wp_es_' . $post_name; ?>" name="<?php echo WPES()->option_key_name; ?>[post_types][]" />&nbsp;
-				<label for="<?php echo 'wp_es_' . $post_name; ?>"><?php echo isset( $post_obj->labels->name ) ? $post_obj->labels->name : $post_name; ?></label><br />
+				<option <?php echo $this->wp_es_checked( $post_name, WPES()->wpes_settings['post_types'], true ); ?> value="<?php echo $post_name; ?>" >
+				<?php echo isset( $post_obj->labels->name ) ? $post_obj->labels->name : $post_name; ?>
+				</option>
 				<?php
 			}
+			?>
+			</select>
+			<?php
 		} else {
 			?>
 			<em><?php _e( 'No public post type found!', 'wp-extended-search' ); ?></em>
@@ -564,16 +579,17 @@ class WPES_Admin {
 	}
 
 	/**
-	 * Return checked if value exist in array.
+	 * Return checked or selected if value exist in array.
 	 *
 	 * @since 1.0
 	 * @param mixed $value value to check against array.
 	 * @param array $array haystack array.
-	 * @return string checked="checked" or blank string.
+	 * @param bool  $selected Set to <code>true</code> when using in select else <code>false</code>.
+	 * @return string checked="checked" or selected="selected" or blank string.
 	 */
-	public function wp_es_checked( $value = false, $array = array() ) {
+	public function wp_es_checked( $value = false, $array = array(), $selected = false ) {
 		if ( in_array( $value, $array, true ) ) {
-			$checked = 'checked="checked"';
+			$checked = $selected ? 'selected="selected"' : 'checked="checked"';
 		} else {
 			$checked = '';
 		}
@@ -641,6 +657,7 @@ class WPES_Admin {
 	/**
 	 * Get base64 encoded svg icon for menu.
 	 *
+	 * @since 2.0.1
 	 * @return string svg icon data.
 	 */
 	public function get_menu_icon() {

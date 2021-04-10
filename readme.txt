@@ -2,9 +2,9 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
 Requires at least: 4.0
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 7.0
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,11 @@ Also, you can add a complete custom template for each search setting in the them
 2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
 
 == Changelog ==
+
+= 2.0.2 - 2021-04-11 =
+* Fixed issue with WooCommerce pages.
+* Fixed issue with backend REST requests.
+* Added Select2 for admin pages.
 
 = 2.0.1 - 2020-12-18 =
 * Fixed errors in dashboard for non-admin users.
