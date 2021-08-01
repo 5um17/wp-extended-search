@@ -510,6 +510,7 @@ final class WPES_Core {
 			'menu-quick-search',
 			'acf/fields',
 			'elementor_ajax',
+			'woocommerce_json_search_pages'
 		);
 
 		$current_action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : false;
