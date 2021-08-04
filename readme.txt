@@ -2,9 +2,9 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
 Requires at least: 4.0
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,10 @@ Also, you can add a complete custom template for each search setting in the them
 2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
 
 == Changelog ==
+
+= 2.0.3 - 2021-08-04 =
+* Fixed search issue in WC settings > Advanced tab
+* Fixed fatal error with WP 5.8 on new widget screen (Still not compatible with block-based widgets.)
 
 = 2.0.2 - 2021-04-11 =
 * Fixed issue with WooCommerce pages.

@@ -125,6 +125,13 @@ class WPES_Search_Widget extends WP_Widget {
 	 * @param object $instance Current widget instance.
 	 */
 	public function form( $instance ) {
+
+		/* WP 5.8 fix */
+		if ( function_exists( 'wp_use_widgets_block_editor' ) && wp_use_widgets_block_editor() ) {
+			printf( __( 'WPES is not compatible with block-based widgets yet. You can install %s plugin to enable classic widget screen. Also, you can send me a request in the plugin support forum if you like WPES to provide support for block-based widgets.', 'wp-extended-search' ), '<a href="https://wordpress.org/plugins/classic-widgets/" rel="nofollow">Classic Widgets</a>' );
+			return;
+		}
+
 		$instance     = wp_parse_args( (array) $instance, array_merge( WPES()->wpes_search_form->form_default_args, array( 'title' => '' ) ) );
 		$all_settings = WPES()->wpes_admin->get_all_setting_names(); ?>
 
