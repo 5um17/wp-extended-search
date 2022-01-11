@@ -155,7 +155,7 @@ class WPES_Admin {
 				array(
 					'admin_setting_page'      => admin_url( 'admin.php?page=wp-es' ),
 					'new_setting_url'         => admin_url( 'post-new.php?post_type=wpes_setting' ),
-					'wc_setting_alert_txt'    => __( 'The setting will be saved before you can make further changes.', 'wp-extended-search' ),
+					'wc_setting_alert_txt'    => __( 'The setting will be saved before you make any further changes.', 'wp-extended-search' ),
 					'select2_str_noResults'   => __( 'No results found.', 'wp-extended-search' ),
 					'select2_str_placeholder' => __( 'Select', 'wp-extended-search' ),
 				)
