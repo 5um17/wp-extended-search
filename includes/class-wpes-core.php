@@ -78,6 +78,14 @@ final class WPES_Core {
 	public $wpes_admin = false;
 
 	/**
+	 * Flag to include mime type query.
+	 *
+	 * @since dev
+	 * @var boolean
+	 */
+	private $include_mime_type = false;
+
+	/**
 	 * Default Constructor
 	 *
 	 * @since 1.0
@@ -168,6 +176,7 @@ final class WPES_Core {
 			'orderby'        => '',
 			'order'          => 'DESC',
 			'exact_match'    => 'no',
+			'media_types'    => array(),
 		);
 		return $settings;
 	}
@@ -306,6 +315,14 @@ final class WPES_Core {
 					$query->set( 'post_status', array( 'publish', 'inherit', 'private' ) );
 					$query->set( 'perm', 'readable' ); // Check if current user can read private posts.
 				}
+
+				if ( ! empty( $this->wpes_settings['media_types'] ) ) {
+					$this->include_mime_type = true;
+					// If there is any mime type set in WP_Query already then remove it.
+					if ( $query->get( 'post_mime_type' ) ) {
+						$query->set( 'post_mime_type', false );
+					}
+				}
 			}
 
 			// Set orderby.
@@ -439,6 +456,9 @@ final class WPES_Core {
 			}
 		}
 
+		// Maybe add mime type query.
+		$search = $this->add_mime_type_where( $search );
+
 		// Join Table.
 		add_filter( 'posts_join_request', array( $this, 'wp_es_join_table' ) );
 
@@ -496,6 +516,26 @@ final class WPES_Core {
 	public function wp_es_distinct( $distinct ) {
 		$distinct = 'DISTINCT';
 		return $distinct;
+	}
+
+	/**
+	 * Add mime type SQL to search query.
+	 *
+	 * @since dev
+	 * @global Object $wpdb WPDB object.
+	 * @param string $search Search SQL.
+	 * @return string Search SQL with mime type query.
+	 */
+	private function add_mime_type_where( $search ) {
+		if ( true === $this->include_mime_type ) {
+			global $wpdb;
+			$mime_types = esc_sql( $this->wpes_settings['media_types'] );
+			array_push( $mime_types, '' );
+			$mime_types = implode( "','", $mime_types );
+			$search    .= " AND $wpdb->posts.post_mime_type IN ('$mime_types') ";
+		}
+
+		return $search;
 	}
 
 	/**

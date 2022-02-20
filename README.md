@@ -23,6 +23,7 @@ For custom search forms, you have the option to choose from a widget, shortcode,
 * Customize SQL relation (AND/OR) between search terms
 * Customize order of search results
 * Control whether to match search query exactly or partially
+* Limit attachment results by mime type e.g. display only pdf files in search results.
 * Translation ready
 * Compatible with WPML
 

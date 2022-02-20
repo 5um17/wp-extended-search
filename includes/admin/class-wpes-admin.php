@@ -103,6 +103,9 @@ class WPES_Admin {
 		// Add Sections.
 		if ( empty( WPES()->wpes_settings['disabled'] ) ) {
 			add_settings_section( 'wp_es_section_1', __( 'Select Fields to include in WordPress default Search', 'wp-extended-search' ), array( $this, 'wp_es_section_content' ), 'wp-es' );
+			if ( in_array( 'attachment', WPES()->wpes_settings['post_types'], true ) ) {
+				add_settings_section( 'wp_es_section_media', __( 'Media Search Settings', 'wp-extended-search' ), null, 'wp-es' );
+			}
 			add_settings_section( 'wp_es_section_misc', __( 'Miscellaneous Settings', 'wp-extended-search' ), null, 'wp-es' );
 		} else {
 			add_settings_section( 'wp_es_section_disabled', __( 'WPES is disabled for global WordPress search. Select setting name to manage other search settings.', 'wp-extended-search' ), null, 'wp-es' );
@@ -130,6 +133,7 @@ class WPES_Admin {
 		add_settings_field( 'wp_es_exclude_older_results', __( 'Select date to exclude older results', 'wp-extended-search' ), array( $this, 'wp_es_exclude_results' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_exclude_date' ) );
 		add_settings_field( 'wp_es_number_of_posts', __( 'Posts per page', 'wp-extended-search' ), array( $this, 'wp_es_posts_per_page' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_posts_per_page' ) );
 		add_settings_field( 'wp_es_search_results_order', __( 'Search Results Order', 'wp-extended-search' ), array( $this, 'wp_es_search_results_order' ), 'wp-es', 'wp_es_section_misc', array( 'label_for' => 'es_search_results_order' ) );
+		add_settings_field( 'wp_es_media_types', __( 'Media Types', 'wp-extended-search' ), array( $this, 'wp_es_media_types' ), 'wp-es', 'wp_es_section_media' );
 	}
 
 	/**
@@ -480,6 +484,7 @@ class WPES_Admin {
 			}
 			?>
 			</select>
+			<p class="description"><?php _e( 'If you are selecting Media post type then save the settings once to enable more media settings.', 'wp-extended-search' ); ?></p>
 			<?php
 		} else {
 			?>
@@ -579,6 +584,28 @@ class WPES_Admin {
 	}
 
 	/**
+	 * Select mime type.
+	 *
+	 * @since dev
+	 */
+	public function wp_es_media_types() {
+		?>
+		<select multiple="multiple" class="wpes-select2" name="<?php echo WPES()->option_key_name; ?>[media_types][]">
+			<?php
+			foreach ( (array) get_allowed_mime_types() as $ext => $type ) {
+				?>
+				<option <?php echo $this->wp_es_checked( $type, WPES()->wpes_settings['media_types'], true ); ?> value="<?php echo esc_attr( $type ); ?>" >
+					<?php echo $ext; ?>
+				</option>
+				<?php
+			}
+			?>
+		</select>
+		<p class="description"><?php _e( 'Select the media types to limit the results by type. Leave blank to search all media types.', 'wp-extended-search' ); ?></p>
+		<?php
+	}
+
+	/**
 	 * Return checked or selected if value exist in array.
 	 *
 	 * @since 1.0
@@ -606,7 +633,7 @@ class WPES_Admin {
 	 * @return string disabled="disabled" or blank string.
 	 */
 	public function wp_es_disabled( $first_value, $second_value = true ) {
-		if ( $first_value == $second_value ) {
+		if ( $first_value == $second_value ) { // phpcs:ignore loose comparison
 			return 'disabled="disabled"';
 		}
 
