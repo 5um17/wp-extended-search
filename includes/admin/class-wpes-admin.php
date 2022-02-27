@@ -37,6 +37,8 @@ class WPES_Admin {
 		// Add docs and setting links.
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_links' ), 10, 2 );
 		add_filter( 'plugin_action_links_' . WPES_FILENAME, array( $this, 'plugin_action_links' ) );
+		add_action('admin_notices', array($this, 'recommended_plugins'));
+		add_action('wp_ajax_wpes_dismiss_recommendations', array($this, 'dismiss_recommendations'));
 	}
 
 	/**
@@ -178,6 +180,8 @@ class WPES_Admin {
 				)
 			);
 		}
+		
+		wp_enqueue_script( 'wpes_admin_global', WPES_ASSETS_URL . 'js/wp-es-admin-global.js', [], false, true );
 	}
 
 	/**
@@ -674,7 +678,7 @@ class WPES_Admin {
 	public function plugin_action_links( $links ) {
 		if ( is_array( $links ) ) {
 			$links[] = '<a href="' . admin_url( 'options-general.php?page=wp-es' ) . '">'
-					. __( 'Settings', 'wp-extended-search' )
+					. __( 'Settings' )
 					. '</a>';
 		}
 
@@ -689,5 +693,23 @@ class WPES_Admin {
 	 */
 	public function get_menu_icon() {
 		return 'data:image/svg+xml;base64,' . 'PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2ODMuMDAwMDAwIDQzNy4wMDAwMDAiPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsNDM3LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKICAgICAgIGZpbGw9IiMwMDAwMDAiIHN0cm9rZT0ibm9uZSI+CiAgICAgICAgPHBhdGggZD0iTTQyNSA0MDYwIGwtMzUgLTM2IDAgLTE4MDUgMCAtMTgwNSAzMyAtMzIgMzMgLTMyIDYxMCAwIDYxMCAwIDMyIDMzCmMzMCAzMSAzMiAzNyAzMiAxMDggMCA3MiAtMSA3NiAtMzMgMTA3IGwtMzMgMzIgLTQ3NCAyIC00NzUgMyAwIDE1OTAgMCAxNTkwCjQ3NSAzIDQ3NCAyIDMzIDMyIGMzMiAzMSAzMyAzNSAzMyAxMDggMCA3MCAtMiA3OCAtMjggMTAzIGwtMjggMjcgLTYxMiAyCi02MTMgMyAtMzQgLTM1eiIvPgogICAgICAgIDxwYXRoIGQ9Ik01MjM3IDQwNjIgYy0yNCAtMjUgLTI3IC0zNSAtMjcgLTEwMyAwIC03MiAxIC03NiAzMyAtMTA3IGwzMyAtMzIKNDc3IDAgNDc3IDAgMCAtMTU5NSAwIC0xNTk1IC00NzggMCAtNDc4IDAgLTMyIC0zMyBjLTMwIC0zMSAtMzIgLTM3IC0zMiAtMTA4CjAgLTcyIDEgLTc2IDMzIC0xMDcgbDMzIC0zMiA2MTAgMCA2MTAgMCAzMiAzMyAzMiAzMyAwIDE4MDkgMCAxODA5IC0yNyAyOAotMjcgMjggLTYyMSAwIC02MjEgMCAtMjcgLTI4eiIvPgogICAgICAgIDxwYXRoIGQ9Ik0yODEyIDM0MTAgYy0yMTYgLTM5IC00MDQgLTE2OCAtNTI0IC0zNjAgLTI3MCAtNDMyIC0xMTkgLTEwMjMgMzE3Ci0xMjQwIDEyMiAtNjAgMTg5IC03NSAzMzUgLTc0IDEwNyAxIDEzNyA1IDIwNSAyNyAxMTAgMzcgMjEzIDk2IDI4OSAxNjcgbDY0CjYwIDcgLTM3IGM5IC01MiAzNyAtMTAzIDc3IC0xMzkgNDYgLTQzIDg3NCAtNjYzIDkyMyAtNjkxIDYwIC0zNCAxMzcgLTMyIDE5OAo2IDY5IDQ0IDEwMSA5OSAxMDUgMTgyIDQgNTYgMCA3NyAtMjEgMTIzIC0yNSA1NCAtMzUgNjIgLTQ5OSA0MDkgLTI4MCAyMTAKLTQ4OSAzNjAgLTUxMiAzNjcgLTIyIDcgLTU5IDEwIC04NyA3IC0yNyAtMyAtNDkgLTUgLTQ5IC00IDAgMiA5IDMwIDIxIDYyCjE0MyA0MDkgLTMyIDg3OSAtMzk3IDEwNjMgLTEzMyA2NyAtMzE1IDk2IC00NTIgNzJ6IG0yNzAgLTI3MCBjMTc2IC01NCAzMjIKLTIxNSAzNzUgLTQxMSAyNiAtOTkgMjIgLTI0NCAtMTEgLTM0NCAtNjAgLTE4NSAtMjEwIC0zMzUgLTM4MSAtMzgwIC0yNDMgLTYzCi00OTEgNTUgLTYwOCAyODggLTE2OSAzMzggLTEgNzU3IDM0MyA4NTMgNzIgMjAgMjA4IDE3IDI4MiAtNnoiLz4KICAgIDwvZz4KPC9zdmc+';
+	}
+	
+	public function recommended_plugins() {
+		if (!current_user_can('manage_options') || defined('CLASSIC_AND_BLOCK_WIDGETS_FILENAME') || get_transient('wp_es_remove_recommendations')) {
+			return;
+		}
+		?>
+		<div id="wpes-dismiss-recommendations" class="notice notice-info is-dismissible">
+			<p><?php printf(__( '%1$s recommends installing %2$s plugin to manage widgets.', 'wp-extended-search' ), '<em>WP Extended Search</em>', '<a href="https://wordpress.org/plugins/classic-widgets-with-block-based-widgets/" rel="nofollow"><em>Classic Widgets with Block-based Widgets</em></a>'); ?></p>
+		</div>
+		<?php
+	}
+	
+	public function dismiss_recommendations() {
+		wp_send_json_success([
+			'notice_removed' => set_transient('wp_es_remove_recommendations', true)
+		]);
+		exit;
 	}
 }
