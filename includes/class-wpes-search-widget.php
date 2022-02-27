@@ -69,7 +69,7 @@ class WPES_Search_Widget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		// Returns blank string if current setting ID does belong to widget.
-		if ( ! empty( WPES()->current_setting_id ) && WPES()->current_setting_id != $instance['wpessid'] ) {
+		if ( ! empty( WPES()->current_setting_id ) && WPES()->current_setting_id != $instance['wpessid'] ) { // phpcs:ignore loose comparison
 			return '';
 		}
 
@@ -128,7 +128,15 @@ class WPES_Search_Widget extends WP_Widget {
 
 		/* WP 5.8 fix */
 		if ( function_exists( 'wp_use_widgets_block_editor' ) && wp_use_widgets_block_editor() ) {
-			printf( __( 'WPES is not compatible with block-based widgets yet. You can install %s plugin to enable classic widget screen. Also, you can send me a request in the plugin support forum if you like WPES to provide support for block-based widgets.', 'wp-extended-search' ), '<a href="https://wordpress.org/plugins/classic-widgets/" rel="nofollow">Classic Widgets</a>' );
+			echo __( 'WPES is not compatible with block-based widgets yet.', 'wp-extended-search' ) . ' ';
+			if ( defined( 'CLASSIC_AND_BLOCK_WIDGETS_FILENAME' ) ) {
+				/* translators: %s: Link to widgets screen. */
+				printf( __( 'You can access the <a href="%s">classic widgets</a> screen to manage the widgets.', 'wp-extended-search' ), admin_url( 'widgets.php?cw=1' ) );
+			} else {
+				/* translators: %s: WordPress plugin anchor tag. */
+				printf( __( 'You can install %s plugin to enable classic widgets screen without losing new widgets screen.', 'wp-extended-search' ), '<a href="https://wordpress.org/plugins/classic-widgets-with-block-based-widgets/" rel="nofollow">Classic Widgets with Block-based Widgets</a>' );
+			}
+			echo ' ' . __( 'Also, you can send a request in the plugin support forum if you like WPES to provide support for block-based widgets.', 'wp-extended-search' );
 			return;
 		}
 

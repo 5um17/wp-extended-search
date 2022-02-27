@@ -214,8 +214,13 @@ class WPES_Settings_CPT {
 			<th><?php _e( 'Widget', 'wp-extended-search' ); ?></th>
 			<td>
 				<?php
-				/* translators: %1$s: URL, %2$s: Plugin Name. */
-				printf( __( 'Go to <a href="%1$s">Appearance &raquo; Widgets</a> and add <em>%2$s Search Form</em> widget.', 'wp-extended-search' ), admin_url( 'widgets.php' ), 'WPES' );
+				if ( defined( 'CLASSIC_AND_BLOCK_WIDGETS_FILENAME' ) ) {
+					/* translators: %1$s: URL, %2$s: Plugin Name. */
+					printf( __( 'Go to <a href="%1$s">Appearance &raquo; Classic Widgets</a> and add <em>%2$s Search Form</em> widget.', 'wp-extended-search' ), admin_url( 'widgets.php?cw=1' ), 'WPES' );
+				} else {
+					/* translators: %1$s: URL, %2$s: Plugin Name. */
+					printf( __( 'Go to <a href="%1$s">Appearance &raquo; Widgets</a> and add <em>%2$s Search Form</em> widget.', 'wp-extended-search' ), admin_url( 'widgets.php' ), 'WPES' );
+				}
 				?>
 			</td>
 			</tr>
