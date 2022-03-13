@@ -80,7 +80,7 @@ final class WPES_Core {
 	/**
 	 * Flag to include mime type query.
 	 *
-	 * @since dev
+	 * @since 2.1
 	 * @var boolean
 	 */
 	private $include_mime_type = false;
@@ -521,7 +521,7 @@ final class WPES_Core {
 	/**
 	 * Add mime type SQL to search query.
 	 *
-	 * @since dev
+	 * @since 2.1
 	 * @global Object $wpdb WPDB object.
 	 * @param string $search Search SQL.
 	 * @return string Search SQL with mime type query.
@@ -585,7 +585,12 @@ final class WPES_Core {
 	 * @param WP_Query $query WP_Query object.
 	 * @return boolean true if query satisfied search conditions else false.
 	 */
-	public function is_search( $query ) {
+	public function is_search( $query = false ) {
+		// If empty set the current global query.
+		if ( empty( $query ) ) {
+			global $wp_query;
+			$query = $wp_query;
+		}
 
 		if ( ! empty( $query->is_search ) && ! empty( $query->get( 's' ) ) && empty( $query->get( 'suppress_filters' ) ) && empty( $query->get( 'disable_wpes' ) ) && ! $this->is_bbPress_search() ) {
 

@@ -29,6 +29,7 @@ class WPES_WC {
 	 */
 	public function init() {
 		add_filter( 'pre_get_posts', array( $this, 'set_wc_archive_page' ), 9 );
+		add_action( 'wp', array( $this, 'adjust_add_to_cart_link' ) );
 	}
 
 	/**
@@ -108,4 +109,27 @@ class WPES_WC {
 			$query->is_post_type_archive = true;
 		}
 	}
+
+	/**
+	 * Append Add to Cart link with search query and wpessid parameter.
+	 *
+	 * @since 2.1
+	 */
+	public function adjust_add_to_cart_link() {
+		if ( WPES()->is_search() ) { // Adjust the link only if it is search results page.
+			$query_arr = array(
+				's' => get_search_query(),
+			);
+
+			WPES()->current_setting_id ? array_push( $query_arr, array( 'wpessid' => WPES()->current_setting_id ) ) : '';
+
+			add_filter(
+				'woocommerce_product_add_to_cart_url',
+				function ( $url ) use ( $query_arr ) {
+					return add_query_arg( $query_arr, $url );
+				}
+			);
+		}
+	}
+
 }
