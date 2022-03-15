@@ -28,8 +28,8 @@ class WPES_Search_Form {
 	public function __construct() {
 		$this->form_default_args = array(
 			'wpessid'                 => false,
-			'submit_button_label'     => esc_attr_x( 'Search', 'submit button' ),
-			'input_box_placeholder'   => esc_attr_x( 'Search &hellip;', 'placeholder' ),
+			'submit_button_label'     => esc_attr_x( 'Search', 'submit button', 'wp-extended-search' ),
+			'input_box_placeholder'   => esc_attr_x( 'Search &hellip;', 'placeholder', 'wp-extended-search' ),
 			'search_form_css_class'   => '',
 			'search_button_css_class' => '',
 			'search_input_css_class'  => '',
