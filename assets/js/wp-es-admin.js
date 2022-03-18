@@ -7,7 +7,7 @@
 jQuery(document).ready(function (){
     
     // Load the options on setting change.
-    jQuery('#wpessid').change(function (){
+    jQuery('#wpessid').on('change', function (){
         var value = jQuery(this).val();
         
         if ( value === 'new' ) {
@@ -20,7 +20,7 @@ jQuery(document).ready(function (){
     });
     
     // Save the setting when WC optimization clicked.
-    jQuery('#es_wc_search').change(function (){
+    jQuery('#es_wc_search').on('change', function (){
         var response = confirm( wpes_admin_vars.wc_setting_alert_txt );
         if (response) {
             jQuery('#submit').trigger('click');

@@ -6,7 +6,7 @@
 
 jQuery(document).ready(function () {
     // Send recommendations dismiss request.
-    jQuery('#wpes-dismiss-recommendations .notice-dismiss').click(function () {
+    jQuery('#wpes-dismiss-recommendations .notice-dismiss').on('click', function () {
         jQuery.ajax({
             method: 'GET',
             url: ajaxurl,
