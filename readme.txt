@@ -4,7 +4,7 @@ Tags: search, postmeta, taxonomy, advance search, category search, page search, 
 Requires at least: 4.0
 Tested up to: 5.9.2
 Requires PHP: 7.0
-Stable tag: 2.1
+Stable tag: 2.1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -84,6 +84,10 @@ Also, you can add a complete custom template for each search setting in the them
 2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
 
 == Changelog ==
+
+= 2.1.1 - 2022-03-19 =
+* Fixed recommendations notice issue with cache plugins.
+* Minor fixes.
 
 = 2.1 - 2022-03-13 =
 * Added new feature to limit attachments by mime type.

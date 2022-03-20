@@ -7,8 +7,8 @@
 jQuery(document).ready(function (){
     
     // Select and copy the code to clipboard.
-    jQuery('.wpes-display-input').click(function (){
-        jQuery(this).select();
+    jQuery('.wpes-display-input').on('click', function (){
+        jQuery(this).trigger('select');
         document.execCommand('copy');
         jQuery(this).parent('td').append('<span class="wpes-copied">'+ wpes_admin_cpt_vars.str_copy +'</span>');
         jQuery('.wpes-copied').fadeOut(2000, function (){

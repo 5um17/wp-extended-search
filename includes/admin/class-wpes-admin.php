@@ -703,15 +703,16 @@ class WPES_Admin {
 	 * @return NULL
 	 */
 	public function recommended_plugins() {
-		if ( ! current_user_can( 'manage_options' ) || defined( 'CLASSIC_AND_BLOCK_WIDGETS_FILENAME' ) || get_transient( 'wp_es_remove_recommendations' ) ) {
+		if ( ! current_user_can( 'manage_options' ) || defined( 'CLASSIC_AND_BLOCK_WIDGETS_FILENAME' ) || get_option( 'wp_es_remove_recommendations' ) ) {
 			return;
 		}
 		?>
 		<div id="wpes-dismiss-recommendations" class="notice notice-info is-dismissible">
 			<p>
 				<?php
+				$install_link = self_admin_url( 'plugin-install.php?s=%22Classic%20Widgets%20with%20Block-based%20Widgets%22&tab=search&type=term' );
 				/* translators: %1$s: Plugin name, %2$s: recommended plugin anchor tag. */
-				printf( __( '%1$s recommends installing %2$s plugin to manage widgets.', 'wp-extended-search' ), '<em>WP Extended Search</em>', '<a href="https://wordpress.org/plugins/classic-widgets-with-block-based-widgets/" rel="nofollow"><em>Classic Widgets with Block-based Widgets</em></a>' );
+				printf( __( '%1$s recommends installing %2$s plugin to manage widgets.', 'wp-extended-search' ), '<em>WP Extended Search</em>', '<a href="' . $install_link . '"><em>Classic Widgets with Block-based Widgets</em></a>' );
 				?>
 			</p>
 		</div>
@@ -726,7 +727,7 @@ class WPES_Admin {
 	public function dismiss_recommendations() {
 		wp_send_json_success(
 			array(
-				'notice_removed' => set_transient( 'wp_es_remove_recommendations', true ),
+				'notice_removed' => update_option( 'wp_es_remove_recommendations', true ),
 			)
 		);
 		exit;
