@@ -50,8 +50,8 @@ class WPES_Admin {
 	public function add_setting_pages() {
 		global $submenu;
 
-		add_menu_page( 'WP Extended Search Settings', 'Extended Search', 'manage_options', 'wp-es', null, $this->get_menu_icon() );
-		add_submenu_page( 'wp-es', 'WP Extended Search Settings', 'Search Settings', 'manage_options', 'wp-es', array( $this, 'wp_es_page' ) );
+		add_menu_page( __( 'WP Extended Search Settings', 'wp-extended-search' ), __( 'Extended Search', 'wp-extended-search' ), 'manage_options', 'wp-es', null, $this->get_menu_icon() );
+		add_submenu_page( 'wp-es', __( 'WP Extended Search Settings', 'wp-extended-search' ), __( 'Search Settings', 'wp-extended-search' ), 'manage_options', 'wp-es', array( $this, 'wp_es_page' ) );
 
 		// Shift main setting page to top.
 		if ( current_user_can( 'manage_options' ) ) {
