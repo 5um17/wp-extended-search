@@ -2,7 +2,7 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
 Requires at least: 4.0
-Tested up to: 5.9.2
+Tested up to: 6.0
 Requires PHP: 7.0
 Stable tag: 2.1.1
 License: GPLv3
