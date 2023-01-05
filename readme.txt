@@ -85,7 +85,7 @@ Also, you can add a complete custom template for each search setting in the them
 
 == Changelog ==
 
-= 2.1.2 - 2023-01-00 =
+= 2.1.2 - 2023-01-05 =
 * Fixed XSS vulnerability in search form.
 * Fixed missing text domains and MO file loading issue.
 * Added option to search in WC product variations. Ref https://wordpress.org/support/topic/search-not-showing-single-product-variations/
