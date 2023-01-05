@@ -213,6 +213,9 @@ final class WPES_Core {
 	 * @since 1.0.1
 	 */
 	public function wp_es_plugin_loaded() {
+		// Load plugin text domain.
+		load_plugin_textdomain( 'wp-extended-search', false, dirname( plugin_basename( WPES_DIR . 'wp-es.php' ) ) . '/languages' );
+
 		// Load the search form class when all plugins are loaded.
 		$this->wpes_search_form = new WPES_Search_Form();
 
@@ -227,9 +230,6 @@ final class WPES_Core {
 			require_once WPES_INTEGRATIONS_PATH . '/class-wpes-wpml.php';
 			$this->wpes_wpml = new WPES_WPML();
 		}
-
-		// Load plugin text domain.
-		load_plugin_textdomain( 'wp-extended-search', false, dirname( plugin_basename( WPES_DIR . 'wp-es.php' ) ) . '/languages' );
 	}
 
 	/**

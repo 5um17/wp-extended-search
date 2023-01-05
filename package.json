@@ -1,6 +1,6 @@
 {
   "name": "wp-extended-search",
-  "version": "2.0.0",
+  "version": "2.1.2",
   "description": "Extend default search to search in selected post meta, taxonomies, post types and all authors.",
   "main": "Gruntfile.js",
   "repository": {

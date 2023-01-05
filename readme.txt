@@ -2,9 +2,9 @@
 Contributors: 5um17
 Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
 Requires at least: 4.0
-Tested up to: 6.0
+Tested up to: 6.1.1
 Requires PHP: 7.0
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,7 +25,7 @@ For custom search forms, you have the option to choose from a widget, shortcode,
 * Search in the post author name
 * Include or exclude any public post type
 * Control whether to search in title or content or excerpt or all
-* Compatible with WooCommerce. Search in product SKU, Attributes, and custom fields, etc.
+* Compatible with WooCommerce. Search in product SKU, Attributes, variations, and custom fields, etc.
 * Create unlimited search settings to use with custom search forms.
 * Add search forms using a widget, shortcode or PHP function. Also works with custom searchform.php
 * Exclude old content from search results (Older than admin specified date)
@@ -84,6 +84,11 @@ Also, you can add a complete custom template for each search setting in the them
 2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
 
 == Changelog ==
+
+= 2.1.2 - 2023-01-00 =
+* Fixed XSS vulnerability in search form.
+* Fixed missing text domains and MO file loading issue.
+* Added option to search in WC product variations. Ref https://wordpress.org/support/topic/search-not-showing-single-product-variations/
 
 = 2.1.1 - 2022-03-19 =
 * Fixed recommendations notice issue with cache plugins.

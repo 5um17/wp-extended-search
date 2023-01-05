@@ -10,7 +10,7 @@
         }
     ],
     "scripts": {
-        "wpcs" : ".\\vendor\\bin\\phpcs --colors --standard=WordPress-Core,WordPress-Docs",
+        "wpcs" : ".\\vendor\\bin\\phpcs --colors -s --standard=WordPress-Core,WordPress-Docs",
         "wpcb" : ".\\vendor\\bin\\phpcbf --standard=WordPress-Core,WordPress-Docs"
     },
     "require": {
@@ -19,5 +19,10 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "wp-coding-standards/wpcs": "^2.3",
         "squizlabs/php_codesniffer": "^3.5"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

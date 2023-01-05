@@ -100,9 +100,11 @@ class WPES_Search_Form {
 	 */
 	public function get_search_form( $args = array() ) {
 
-		$args = wp_parse_args( $args, $this->form_default_args );
+		$args            = wp_parse_args( $args, $this->form_default_args );
+		$args['wpessid'] = ! empty( $args['wpessid'] ) ? intval( $args['wpessid'] ) : false;
 
 		// Returns blank string if current setting ID does belong to widget.
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( ! empty( WPES()->current_setting_id ) && WPES()->current_setting_id != $args['wpessid'] ) {
 			return '';
 		}
@@ -117,6 +119,7 @@ class WPES_Search_Form {
 		// Load search form template if exist for specific setting. e.g. wpes-searchform-1 where 1 is setting ID.
 		$template_file        = empty( $args['wpessid'] ) ? 'wpes-searchform.php' : 'wpes-searchform-' . $args['wpessid'] . '.php';
 		$search_form_template = locate_template( $template_file );
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( '' != $search_form_template ) {
 			ob_start();
 			require( $search_form_template );
@@ -137,12 +140,12 @@ class WPES_Search_Form {
 				$aria_label = '';
 			}
 
-			$form = '<form ' . $this->get_form_id_attr( $args['wpessid'] ) . ' role="search" ' . $aria_label . 'method="get" class="search-form ' . $args['search_form_css_class'] . '" action="' . esc_url( home_url( '/' ) ) . '">
+			$form = '<form ' . $this->get_form_id_attr( $args['wpessid'] ) . ' role="search" ' . $aria_label . 'method="get" class="search-form ' . esc_attr( $args['search_form_css_class'] ) . '" action="' . esc_url( home_url( '/' ) ) . '">
 		<label>
 		    <span class="screen-reader-text">' . _x( 'Search for:', 'label' ) . '</span>
-		    <input type="search" class="search-field ' . $args['search_input_css_class'] . '" placeholder="' . $args['input_box_placeholder'] . '" value="' . get_search_query() . '" name="s" />
+		    <input type="search" class="search-field ' . esc_attr( $args['search_input_css_class'] ) . '" placeholder="' . esc_attr( $args['input_box_placeholder'] ) . '" value="' . get_search_query() . '" name="s" />
 		</label>
-		<input type="submit" class="search-submit ' . $args['search_button_css_class'] . '" value="' . $args['submit_button_label'] . '" />' .
+		<input type="submit" class="search-submit ' . esc_attr( $args['search_button_css_class'] ) . '" value="' . esc_attr( $args['submit_button_label'] ) . '" />' .
 			$this->get_wpessid_hidden_field( $args['wpessid'] ) .
 			'</form>';
 		}

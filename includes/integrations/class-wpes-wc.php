@@ -41,7 +41,7 @@ class WPES_WC {
 		add_filter( 'wpes_meta_keys_query', array( $this, 'product_meta_keys_query' ) );
 		add_filter( 'wpes_meta_keys', array( $this, 'add_hidden_product_meta_keys' ) );
 		add_filter( 'wpes_tax_args', array( $this, 'filter_product_taxonomy_args' ) );
-		add_filter( 'wpes_post_types_args', array( $this, 'filter_post_types_args' ) );
+		add_filter( 'wpes_post_types', array( $this, 'filter_post_types' ) );
 	}
 
 	/**
@@ -85,15 +85,15 @@ class WPES_WC {
 	}
 
 	/**
-	 * Display only product CPT in WPES settings.
+	 * Display only product and variation CPT in WPES settings.
 	 *
-	 * @since 2.0
-	 * @param array $args Array of arguments for get_post_types().
-	 * @return string
+	 * @since 2.1.2
+	 * @return array List of post types.
 	 */
-	public function filter_post_types_args( $args ) {
-		$args['name'] = 'product';
-		return $args;
+	public function filter_post_types() {
+		$post_types['product']           = get_post_type_object( 'product' );
+		$post_types['product_variation'] = get_post_type_object( 'product_variation' );
+		return $post_types;
 	}
 
 	/**

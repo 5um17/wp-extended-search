@@ -200,6 +200,7 @@ class WPES_Admin {
 		 * @since 1.0.1
 		 * @param string SQL query.
 		 */
+		// phpcs:ignore
 		$wp_es_fields = $wpdb->get_results( apply_filters( 'wpes_meta_keys_query', "select DISTINCT meta_key from $wpdb->postmeta where meta_key NOT LIKE '\_%' ORDER BY meta_key ASC" ) );
 		$meta_keys    = array();
 
@@ -489,7 +490,15 @@ class WPES_Admin {
 			}
 			?>
 			</select>
-			<p class="description"><?php _e( 'If you are selecting Media post type then save the settings once to enable more media settings.', 'wp-extended-search' ); ?></p>
+			<p class="description">
+				<?php
+				if ( WPES()->wpes_settings['wc_search'] ) {
+					_e( 'Only select "Variation" if you want to display each variation as a separate item on the search result page.', 'wp-extended-search' );
+				} else {
+					_e( 'If you are selecting Media post type then save the settings once to enable more media settings.', 'wp-extended-search' );
+				}
+				?>
+			</p>
 			<?php
 		} else {
 			?>
