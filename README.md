@@ -15,7 +15,7 @@ For custom search forms, you have the option to choose from a widget, shortcode,
 * Search in the post author name
 * Include or exclude any public post type
 * Control whether to search in title or content or excerpt or all
-* Compatible with WooCommerce. Search in product SKU, Attributes, and custom fields, etc.
+* Compatible with WooCommerce. Search in product SKU, Attributes, variations, and custom fields, etc.
 * Create unlimited search settings to use with custom search forms.
 * Add search forms using a widget, shortcode or PHP function. Also works with custom searchform.php
 * Exclude old content from search results (Older than admin specified date)

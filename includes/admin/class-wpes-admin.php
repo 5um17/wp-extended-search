@@ -148,11 +148,11 @@ class WPES_Admin {
 		// Register scripts for main setting page.
 		if ( 'toplevel_page_wp-es' === $hook ) {
 			wp_enqueue_script( 'jquery-ui-datepicker' );
-			wp_enqueue_script( 'wpes_select2_js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js' );
+			wp_enqueue_script( 'wpes_select2_js', WPES_ASSETS_URL . 'js/select2.min.js' );
 			wp_enqueue_script( 'wpes_admin_js', WPES_ASSETS_URL . 'js/wp-es-admin.js', array( 'jquery-ui-datepicker', 'wpes_select2_js' ) );
 			wp_enqueue_style( 'wpes_jquery_ui', WPES_ASSETS_URL . 'css/jQueryUI/jquery-ui.min.css' );
 			wp_enqueue_style( 'wpes_jquery_ui_theme', WPES_ASSETS_URL . 'css/jQueryUI/jquery-ui.theme.min.css' );
-			wp_enqueue_style( 'wpes_select2_css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' );
+			wp_enqueue_style( 'wpes_select2_css', WPES_ASSETS_URL . 'css/select2.min.css' );
 			wp_enqueue_style( 'wpes_admin_css', WPES_ASSETS_URL . 'css/wp-es-admin.css', array( 'wpes_jquery_ui', 'wpes_jquery_ui_theme', 'wpes_select2_css' ) );
 
 			wp_localize_script(
