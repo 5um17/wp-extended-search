@@ -1,14 +1,22 @@
 <?php
 /**
+ * WP Extended Search
+ *
+ * @package WPES
+ * @author 5um17
+ *
+ * @wordpress-plugin
  * Plugin Name: WP Extended Search
  * Plugin URI: https://www.secretsofgeeks.com/2014/09/wordpress-search-tags-and-categories.html
  * Author: 5um17
  * Author URI: https://www.secretsofgeeks.com
  * Text Domain: wp-extended-search
  * Version: 2.1.2
+ * Requires at least: 4.0
+ * Requires PHP: 7.0
  * Description: Extend search functionality to search in selected post meta, taxonomies, post types, and all authors.
- *
- * @package WPES
+ * License: GPLv3
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
 
 defined( 'ABSPATH' ) || exit();

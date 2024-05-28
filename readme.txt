@@ -1,8 +1,8 @@
 === WP Extended Search ===
 Contributors: 5um17
-Tags: search, postmeta, taxonomy, advance search, category search, page search, tag search, author search, search forms, woocommerce search
+Tags: search, advanced search, category search, tag search, woocommerce search
 Requires at least: 4.0
-Tested up to: 6.1.1
+Tested up to: 6.5.2
 Requires PHP: 7.0
 Stable tag: 2.1.2
 License: GPLv3

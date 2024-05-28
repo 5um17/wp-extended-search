@@ -266,6 +266,9 @@ final class WPES_Core {
 		// Action for modify query arguments.
 		add_action( 'pre_get_posts', array( $this, 'wp_es_pre_get_posts' ), 500 );
 
+		// Add additional hooks for compatibility with core and plugins/themes.
+		$this->add_additional_compatibility_hooks();
+
 		// Call the init function so wpes_enabled filter can work.
 		if ( ! empty( $this->wpes_wc ) ) {
 			$this->wpes_wc->init();
@@ -463,7 +466,12 @@ final class WPES_Core {
 		add_filter( 'posts_join_request', array( $this, 'wp_es_join_table' ) );
 
 		// Request distinct results.
-		add_filter( 'posts_distinct_request', array( $this, 'wp_es_distinct' ) );
+		add_filter(
+			'posts_distinct_request',
+			function() {
+				return 'DISTINCT';
+			}
+		);
 
 		/**
 		 * Filter search query return by plugin.
@@ -498,24 +506,12 @@ final class WPES_Core {
 			$join .= " LEFT JOIN $wpdb->terms est ON (estt.term_id = est.term_id) ";
 		}
 
-		// Joint the users table.
+		// Join the users table.
 		if ( ! empty( $this->wpes_settings['authors'] ) ) {
 			$join .= " LEFT JOIN $wpdb->users esusers ON ($wpdb->posts.post_author = esusers.ID) ";
 		}
 
 		return $join;
-	}
-
-	/**
-	 * Request distinct results.
-	 *
-	 * @since 1.0
-	 * @param string $distinct DISTINCT Keyword.
-	 * @return string $distinct
-	 */
-	public function wp_es_distinct( $distinct ) {
-		$distinct = 'DISTINCT';
-		return $distinct;
 	}
 
 	/**
@@ -602,5 +598,27 @@ final class WPES_Core {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Add additional hooks for compatibility with core and plugins/themes.
+	 *
+	 * @since dev
+	 * @return void
+	 */
+	public function add_additional_compatibility_hooks() {
+		// Disable WPES for Query Loop block when "Inherit query from template" is disabled.
+		add_action(
+			'query_loop_block_query_vars',
+			function( $query, $block ) {
+				if ( empty( $block->context['query']['inherit'] ) ) {
+					$query['disable_wpes'] = true;
+				}
+
+				return $query;
+			},
+			10,
+			2
+		);
 	}
 }
