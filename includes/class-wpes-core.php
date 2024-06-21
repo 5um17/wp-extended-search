@@ -547,12 +547,13 @@ final class WPES_Core {
 			'acf/fields',
 			'elementor_ajax',
 			'woocommerce_json_search_pages',
+			'yith_plugin_fw_json_search',
 		);
 
 		$current_action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : false;
 
 		foreach ( $preserved_actions as $action ) {
-			if ( strpos( $current_action, $action ) !== false ) {
+			if ( strstr( $current_action, $action ) !== false ) {
 				return true;
 			}
 		}

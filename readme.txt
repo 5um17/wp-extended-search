@@ -39,8 +39,8 @@ For custom search forms, you have the option to choose from a widget, shortcode,
 
 = Links =
 
-* [Complete documentation](https://wpes.secretsofgeeks.com/)
-* [GitHub repository](https://github.com/5um17/wp-extended-search)
+* [Documentation](https://wpes.secretsofgeeks.com/)
+* [GitHub](https://github.com/5um17/wp-extended-search)
 
 == Installation ==
 
