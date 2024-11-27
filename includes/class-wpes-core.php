@@ -101,7 +101,7 @@ final class WPES_Core {
 		// Load settings.
 		$this->wpes_settings = $this->wp_es_options();
 
-		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! $this->preserved_ajax_actions() ) ) {
+		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX && $this->is_frontend_ajax() ) ) {
 			// Only filter non admin requests!
 			add_action( 'init', array( $this, 'wp_es_init' ) );
 		}
@@ -213,9 +213,6 @@ final class WPES_Core {
 	 * @since 1.0.1
 	 */
 	public function wp_es_plugin_loaded() {
-		// Load plugin text domain.
-		load_plugin_textdomain( 'wp-extended-search', false, dirname( plugin_basename( WPES_DIR . 'wp-es.php' ) ) . '/languages' );
-
 		// Load the search form class when all plugins are loaded.
 		$this->wpes_search_form = new WPES_Search_Form();
 
@@ -535,27 +532,37 @@ final class WPES_Core {
 	}
 
 	/**
-	 * Check if it is WordPress core or some plugin Ajax action.
-	 *
-	 * @since 1.1.2
-	 * @return boolean TRUE if it core Ajax request else false.
+	 * Check if the Ajax request is from front-end or belongs to preserved actions.
+	 * 
+	 * @since 2.2
+	 * @return bool 
 	 */
-	public function preserved_ajax_actions() {
-		$preserved_actions = array(
-			'query-attachments',
-			'menu-quick-search',
-			'acf/fields',
-			'elementor_ajax',
-			'woocommerce_json_search_pages',
-			'yith_plugin_fw_json_search',
-		);
+	public function is_frontend_ajax() {
+		if ( ! empty( $_REQUEST['action'] ) ) {
+			$current_action = (string) $_REQUEST['action'];
 
-		$current_action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : false;
+			// Some known actions, we should skip.
+			$preserved_actions = array(
+				'query-attachments',
+				'menu-quick-search',
+				'acf/fields',
+				'elementor_ajax',
+				'woocommerce_json_search_pages',
+				'yith_plugin_fw_json_search',
+			);
 
-		foreach ( $preserved_actions as $action ) {
-			if ( strstr( $current_action, $action ) !== false ) {
-				return true;
+			foreach ( $preserved_actions as $action ) {
+				if ( stristr( $current_action, $action ) !== false ) {
+					return false;
+				}
 			}
+
+			// For all other actions we should check HTTP_REFERER.
+			if ( ! empty( $_SERVER['HTTP_REFERER'] ) && stripos( $_SERVER['HTTP_REFERER'], admin_url() ) === 0 ) {
+				return false;
+			}
+
+			return true;
 		}
 
 		return false;
@@ -604,7 +611,7 @@ final class WPES_Core {
 	/**
 	 * Add additional hooks for compatibility with core and plugins/themes.
 	 *
-	 * @since dev
+	 * @since 2.2
 	 * @return void
 	 */
 	public function add_additional_compatibility_hooks() {

@@ -2,9 +2,9 @@
 Contributors: 5um17
 Tags: search, advanced search, category search, tag search, woocommerce search
 Requires at least: 4.0
-Tested up to: 6.5.2
+Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 2.1.2
+Stable tag: 2.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -84,6 +84,13 @@ Also, you can add a complete custom template for each search setting in the them
 2.0 went through code refactoring and major feature updates. Please make a complete site backup before upgrading.
 
 == Changelog ==
+
+= 2.2 - 2024-11-28 =
+* Fixed issue with YITH badges management plugin.
+* Fixed issue with WP Query loop block.
+* Removed select2 CDN.
+* Fixed issues with WP 6.7
+* Other minor improvements.
 
 = 2.1.2 - 2023-01-05 =
 * Fixed XSS vulnerability in search form.
