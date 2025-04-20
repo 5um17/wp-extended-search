@@ -533,9 +533,9 @@ final class WPES_Core {
 
 	/**
 	 * Check if the Ajax request is from front-end or belongs to preserved actions.
-	 * 
+	 *
 	 * @since 2.2
-	 * @return bool 
+	 * @return bool
 	 */
 	public function is_frontend_ajax() {
 		if ( ! empty( $_REQUEST['action'] ) ) {

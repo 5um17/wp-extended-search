@@ -26,6 +26,16 @@ class WPES_Search_Form {
 	 * @since 2.0
 	 */
 	public function __construct() {
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
+	/**
+	 * `init` hook callback function.
+	 *
+	 * @return void
+	 * @since 2.2.1
+	 */
+	public function init() {
 		$this->form_default_args = array(
 			'wpessid'                 => false,
 			'submit_button_label'     => esc_attr_x( 'Search', 'submit button', 'wp-extended-search' ),
